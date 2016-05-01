@@ -3,6 +3,7 @@
 $session = isset($_GET["s"])?$_GET["s"]:"";
 
 switch ( $session ) {
+
 	case cPrincipal:
 		$_SESSION["seccion"] = 0;
 	break;	
