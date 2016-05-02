@@ -94,13 +94,13 @@ switch ( $accion ) {
         if ( $idUsuario == "" ) 
         {
 
-                setNotificacion( $mensajeUsuarios["errors"][5], "error");
-                header("location: ../../home.php?s=" . cUsuarios);
+            setNotificacion( $mensajeUsuarios["errors"][5], "error");
+            header("location: ../../home.php?s=" . cUsuarios);
 
         } else 
         {
 
-                $cliente = new nusoap_client($urlWebServiceServer . "usuarios.wsdl", true);
+            $cliente = new nusoap_client($urlWebServiceServer . "usuarios.wsdl", true);
 
         } 
 
@@ -108,7 +108,13 @@ switch ( $accion ) {
 
     case '5': //Listar
         
-        $cliente = new nusoap_client($urlWebServiceServer . "usuarios.wsdl", true); 
+            $cliente = new nusoap_client($urlWebServiceServer . "usuarios.wsdl", true); 
+
+        break;
+
+    case '6': //Get Usuario con Id
+        
+            $cliente = new nusoap_client($urlWebServiceServer . "usuarios.wsdl", true);
 
         break;
     
@@ -144,21 +150,32 @@ if ( $cliente->fault )
         //SI ES UN MENSAJE SATISFACTORIO SE MUESTRA Y SE REDIRECCIONA
         if ( isset($datos->success) )
         {
-            if ( $accion == 5 ) {
+            
+            if ( ( $accion == 5 ) || ( $accion == 6 ) ) {
 
+                unset( $_SESSION["datos"] );
                 $_SESSION["datos"] = $datos->datos;
+                
+                if ( $accion == 5 ) {
+                
+                    header("location: ../../home.php?s=" . cUsuarios);
+                
+                } else if ( $accion == 6 ) {
+                
+                    header("location: ../../home.php?s=" . cEditUsuarios . "&idUsuario=" . $idUsuario);
+                
+                }
 
             } else {
 
-                 setNotificacion($mensajeUsuarios["success"][$datos->success], "success");
+                setNotificacion($mensajeUsuarios["success"][$datos->success], "success");
+                header("location: ../../home.php?s=" . cUsuarios);
 
             }
 
-            header("location: ../../home.php?s=" . cUsuarios);
-
         //SI ES UN MENSAJE DE ERROR SE MUESTRA Y SE REDIRECCIONA
         } else {
-
+            
             setNotificacion($mensajeUsuarios["errors"][$datos->errors], "error");
             header("location: ../../home.php?s=" . cUsuarios);
 

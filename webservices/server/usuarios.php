@@ -27,12 +27,13 @@ $server->register( "fnGenerica",
 $post = file_get_contents( "php://input" );
 $server->service( $post );
 
-
 function fnGenerica( $idUsuario = null, $nombre, $usuario, $clave, $reclave, $extension = null, $tipoUsuario, $idCliente, $accion, $hashValidate ) 
 {
     
     require_once "../../includes/db.php";
     
+
+
     if ( ( strlen( $hashValidate ) == 41 ) && ( substr( $hashValidate, 0, 1 ) == "*" ) )  //ES UN HASH VALIDO
     {
 
@@ -102,7 +103,16 @@ function fnGenerica( $idUsuario = null, $nombre, $usuario, $clave, $reclave, $ex
                 $respuesta["success"] = 1;
                 return json_encode( $respuesta );
 
+            } else if ( $accion == 6 ) //GET USUARIO BY ID
+            {
+
+                $datos = $db->select("usuarios", "*", ["id" => $idUsuario]);
+                $respuesta["datos"] = $datos[0];
+                $respuesta["success"] = 1;
+                return json_encode( $respuesta );
+
             }
+
         } else //El hash no existe en el sistema
         {
 

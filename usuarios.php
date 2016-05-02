@@ -57,26 +57,26 @@
                                         </thead>
                                         <tbody>
                                             <?php
-                                             echo ($_SESSION["datos"]);
+                                            //print_r($_SESSION["datos"]);
                                             if ( $_SESSION["usuario"]["idTipoUsuario"] == 1 ) {
-                                                $datas = json_decode( $_SESSION["datos"] );
+                                                $datas = $_SESSION["datos"];
                                             } else {
-                                                $datas = json_decode( $_SESSION["datos"] );
+                                                $datas = $_SESSION["datos"];
                                             }
                                             
 											foreach ($datas as $data) {
                                             ?>
                                             <tr>
-                                            	<td><b><?=$data["id"]?></b></td>
-                                                <td><?=$data["nombre"]?></td>
-                                                <td><?=$data["usuario"]?></td>
-                                                <td><?=buscaNombre($db, "clientes", $data["idCliente"])?></td>
-                                                <td><?=buscaNombre($db, "tipo_usuario", $data["idTipoUsuario"])?></td>
-                                                <td><?=estatus($data["estatus"])?></td>
+                                            	<td><b><?=$data->id?></b></td>
+                                                <td><?=$data->nombre?></td>
+                                                <td><?=$data->usuario?></td>
+                                                <td><?=buscaNombre($db, "clientes", $data->idCliente)?></td>
+                                                <td><?=buscaNombre($db, "tipo_usuario", $data->idTipoUsuario)?></td>
+                                                <td><?=estatus($data->estatus)?></td>
                                                 <td>
-                                                	<a href="home.php?s=<?=cEditUsuarios?>&id=<?=$data["id"]?>"><i class="fa fa-pencil-square-o"></i></a>
-                                                	<a href="<?=$urlWebServiceClient?>clienteUsuarios.php?idUsuario=<?=$data["id"]?>&accion=4"><i class="<?=muestraToggle($data["estatus"])?>"></i></a>
-                                                	<a href="<?=$urlWebServiceClient?>clienteUsuarios.php?idUsuario=<?=$data["id"]?>&accion=3"><i class="fa fa-remove"></i></a>
+                                                	<a href="<?=$urlWebServiceClient?>clienteUsuarios.php?idUsuario=<?=$data->id?>&accion=6"><i class="fa fa-pencil-square-o"></i></a>
+                                                	<a href="<?=$urlWebServiceClient?>clienteUsuarios.php?idUsuario=<?=$data->id?>&accion=4"><i class="<?=muestraToggle($data->estatus)?>"></i></a>
+                                                	<a href="<?=$urlWebServiceClient?>clienteUsuarios.php?idUsuario=<?=$data->id?>&accion=3"><i class="fa fa-remove"></i></a>
                                                 </td>
                                             </tr>
                                             <?php

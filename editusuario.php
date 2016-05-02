@@ -12,7 +12,8 @@
                     </ol>
                 </section>
 				<?php
-                $reg = $db->get("usuarios", "*", ["id" => $_GET["id"] ]);
+                //$reg = $db->get("usuarios", "*", ["id" => $_GET["id"] ]);
+                $reg = $_SESSION["datos"];
 				?>
                 <!-- Main content -->
                 <section class="content">
@@ -25,30 +26,30 @@
                                     <h3 class="box-title">Datos del Usuario</h3>
                                 </div><!-- /.box-header -->
                                 <!-- form start -->
-                                <form role="form" action="<?=$urlWebServiceClient?>clienteUsuarios.php?idUsuario=<?=$_GET["id"]?>&accion=2" autocomplete="off" method="post">
+                                <form role="form" action="<?=$urlWebServiceClient?>clienteUsuarios.php?idUsuario=<?=$_GET["idUsuario"]?>&accion=2" autocomplete="off" method="post">
                                     <div class="box-body">
                                     	<?php
 	                                    showNotificacion();
 	                                    ?>
                                         <div class="form-group">
                                         	<label for="txtNombre">* Nombre del Usuario</label>
-	                                        <input type="text" name="txtNombre" value="<?=$reg["nombre"];?>" id="txtNombre" class="form-control" placeholder="Nombre">
+	                                        <input type="text" name="txtNombre" value="<?=$reg->nombre;?>" id="txtNombre" class="form-control" placeholder="Nombre">
 	                                    </div>                                     
                                         <div class="form-group">
 	                                        <label for="txtUsuario">* Usuario</label>
-	                                        <input type="text" name="txtUsuario" value="<?=$reg["usuario"];?>" id="txtUsuario" class="form-control" placeholder="Usuario: ejemplo (jperez)">
+	                                        <input type="text" name="txtUsuario" value="<?=$reg->usuario;?>" id="txtUsuario" class="form-control" placeholder="Usuario: ejemplo (jperez)">
 	                                    </div>
 	                                    <div class="form-group">
 	                                        <label for="txtClave">* Clave</label>
-	                                        <input type="password" name="txtClave" value="<?=$reg["clave"];?>" id="txtClave" class="form-control" placeholder="Clave">
+	                                        <input type="password" name="txtClave" value="" id="txtClave" class="form-control" placeholder="Clave">
 	                                    </div>
 	                                    <div class="form-group">
 	                                        <label for="txtReClave">* Repita la Clave</label>
-	                                        <input type="password" name="txtReClave" value="<?=$reg["clave"];?>" id="txtReClave" class="form-control" placeholder="Repita la Clave">
+	                                        <input type="password" name="txtReClave" value="" id="txtReClave" class="form-control" placeholder="Repita la Clave">
 	                                    </div>
 	                                    <div class="form-group">
 	                                        <label for="txtExtension">* Extension</label>
-	                                        <input type="text" name="txtExtension" value="<?=$reg["extension"];?>" id="txtExtension" class="form-control" placeholder="Extension en caso que sea necesario">
+	                                        <input type="text" name="txtExtension" value="<?=$reg->extension;?>" id="txtExtension" class="form-control" placeholder="Extension en caso que sea necesario">
 	                                    </div>
 	                                    <?php
 	                                    if ( $_SESSION["usuario"]["idTipoUsuario"] == 1 ) {
@@ -63,7 +64,7 @@
 	                                        <?php
 	                                        foreach ( $datas as $data ) {
 	                                        ?>
-	                                        	<option <?=($reg["idTipoUsuario"] == $data["id"])?"selected":""?> value="<?=$data["id"]?>"><?=$data["nombre"]?></option>
+	                                        	<option <?=($reg->idTipoUsuario == $data["id"])?"selected":""?> value="<?=$data["id"]?>"><?=$data["nombre"]?></option>
 	                                        <?php
 											}
 	                                        ?>
@@ -77,7 +78,7 @@
 	                                        <?php
 	                                        foreach ( $datas as $data ) {
 	                                        ?>
-	                                        	<option <?=($reg["idCliente"] == $data["id"])?"selected":""?> value="<?=$data["id"]?>"><?=$data["nombre"]?></option>
+	                                        	<option <?=($reg->idCliente == $data["id"])?"selected":""?> value="<?=$data["id"]?>"><?=$data["nombre"]?></option>
 	                                        <?php
 											}
 	                                        ?>
