@@ -77,8 +77,8 @@
 	                                    <?php
 	                                    $datas = $db->select("usuarios",["id", "nombre"], ["AND" => ["estatus" => "1", "idTipoUsuario" => 5], "ORDER" => "nombre ASC"]);
 	                                    ?>
-	                                    <label for="cmbTipoCobranza">Vendedor</label>
-	                                    <select name="cmbTipoCobranza" id="cmbTipoCobranza" class="form-control">
+	                                    <label for="cmbVendedor">Vendedor</label>
+	                                    <select name="cmbVendedor" id="cmbVendedor" class="form-control">
 	                                        <option value="0">-- SELECCIONE --</option>
 	                                        <?php
 	         			                    foreach ( $datas as $data ) {
