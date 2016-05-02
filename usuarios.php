@@ -31,9 +31,6 @@
                         <li class="active">Usuarios</li>
                     </ol>
                 </section>
-                <?php
-                print_r($_SESSION["datos"]);
-                ?>
                 <!-- Main content -->
                 <section class="content">
                     <div class="row">
@@ -61,9 +58,9 @@
                                         <tbody>
                                             <?php
                                             if ( $_SESSION["usuario"]["idTipoUsuario"] == 1 ) {
-                                                $datas = $db->select("usuarios", "*", ["ORDER" => ["estatus DESC", "id DESC"]]);    
+                                                $datas = json_decode( $_SESSION["datos"] );
                                             } else {
-                                                $datas = $db->select("usuarios", "*", ["ORDER" => ["estatus DESC", "id DESC"]]);    
+                                                $datas = json_decode( $_SESSION["datos"] );
                                             }
                                             
 											foreach ($datas as $data) {
