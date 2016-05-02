@@ -31,7 +31,9 @@
                         <li class="active">Usuarios</li>
                     </ol>
                 </section>
-
+                <?php
+                print_r($_SESSION["datos"]);
+                ?>
                 <!-- Main content -->
                 <section class="content">
                     <div class="row">

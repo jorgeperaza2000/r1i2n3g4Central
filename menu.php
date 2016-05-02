@@ -64,7 +64,7 @@ function activaMenu( $seccion, $valor ) {
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="home.php?s=<?=cUsuarios;?>"><i class="fa fa-angle-double-right"></i> Buscar</a></li>
+                    <li><a href="<?=$urlWebServiceClient;?>clienteUsuarios.php"><i class="fa fa-angle-double-right"></i> Buscar</a></li>
                     <li><a href="home.php?s=<?=cAddUsuarios;?>"><i class="fa fa-angle-double-right"></i> Crear</a></li>
                 </ul>
             </li>

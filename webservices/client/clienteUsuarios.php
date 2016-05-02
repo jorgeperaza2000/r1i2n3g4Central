@@ -11,7 +11,7 @@ $reclave = isset($_POST["txtReClave"])?$_POST["txtReClave"]:"";
 $extension = isset($_POST["txtExtension"])?$_POST["txtExtension"]:"";
 $tipoUsuario = isset($_POST["cmbTipoUsuario"])?$_POST["cmbTipoUsuario"]:"0";
 $idCliente = isset($_POST["cmbCliente"])?$_POST["cmbCliente"]:"0";
-$accion = isset($_GET["accion"])?$_GET["accion"]:"";
+$accion = isset($_GET["accion"])?$_GET["accion"]:"5";
 $hash = "*E6CC90B878B948C35E92B003C792C46C58C4AF40";
 
 //SWITCH PARA VALIDACIONES SEGUN ACCION
@@ -105,6 +105,12 @@ switch ( $accion ) {
         } 
 
         break;
+
+    case '5': //Listar
+        
+        $cliente = new nusoap_client($urlWebServiceServer . "usuarios.wsdl", true); 
+
+        break;
     
 }
 
@@ -138,7 +144,16 @@ if ( $cliente->fault )
         //SI ES UN MENSAJE SATISFACTORIO SE MUESTRA Y SE REDIRECCIONA
         if ( isset($datos->success) )
         {
-            setNotificacion($mensajeUsuarios["success"][$datos->success], "success");
+            if ( $accion == 5 ) {
+
+                $_SESSION["datos"] = $mensajeUsuarios["success"];
+
+            } else {
+
+                 setNotificacion($mensajeUsuarios["success"][$datos->success], "success");
+                 
+            }
+
             header("location: ../../home.php?s=" . cUsuarios);
 
         //SI ES UN MENSAJE DE ERROR SE MUESTRA Y SE REDIRECCIONA
