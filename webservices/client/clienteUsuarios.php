@@ -146,7 +146,7 @@ if ( $cliente->fault )
         {
             if ( $accion == 5 ) {
 
-                $_SESSION["datos"] = $mensajeUsuarios["success"];
+                $_SESSION["datos"] = $datos->datos;
 
             } else {
 
