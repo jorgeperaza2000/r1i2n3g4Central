@@ -94,6 +94,14 @@ function fnGenerica( $idUsuario = null, $nombre, $usuario, $clave, $reclave, $ex
                 $respuesta["success"] = 1;
                 return json_encode( $respuesta );
 
+            } else if ( $accion == 5 ) //Listar
+            {
+
+                $datos = $db->select("usuarios", "*", ["estatus" => 1]);
+                $respuesta["datos"] = $datos;
+                $respuesta["success"] = 1;
+                return json_encode( $respuesta );
+
             }
         } else //El hash no existe en el sistema
         {

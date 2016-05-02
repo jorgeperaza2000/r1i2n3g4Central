@@ -151,7 +151,7 @@ if ( $cliente->fault )
             } else {
 
                  setNotificacion($mensajeUsuarios["success"][$datos->success], "success");
-                 
+
             }
 
             header("location: ../../home.php?s=" . cUsuarios);
