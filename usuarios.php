@@ -57,6 +57,7 @@
                                         </thead>
                                         <tbody>
                                             <?php
+                                             echo ($_SESSION["datos"]);
                                             if ( $_SESSION["usuario"]["idTipoUsuario"] == 1 ) {
                                                 $datas = json_decode( $_SESSION["datos"] );
                                             } else {
