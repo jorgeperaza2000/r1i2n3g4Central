@@ -75,6 +75,20 @@
 	                                        <input type="text" name="txtNumeroUsuarios" value="<?=$reg["numeroUsuarios"];?>" id="txtNumeroUsuarios" class="form-control" placeholder="Máximo de usuarios permitidos">
 	                                    </div>
 	                                    <?php
+	                                    $datas = $db->select("usuarios",["id", "nombre"], ["AND" => ["estatus" => "1", "idTipoUsuario" => 5], "ORDER" => "nombre ASC"]);
+	                                    ?>
+	                                    <label for="cmbTipoCobranza">Vendedor</label>
+	                                    <select name="cmbTipoCobranza" id="cmbTipoCobranza" class="form-control">
+	                                        <option value="0">-- SELECCIONE --</option>
+	                                        <?php
+	         			                    foreach ( $datas as $data ) {
+	                                        ?>
+	                                        	<option <?=($reg["idVendedor"] == $data["id"])?"selected":""?> value="<?=$data["id"]?>"><?=$data["nombre"]?></option>
+	                                        <?php
+											}
+	                                        ?>
+	                                    </select>
+	                                    <?php
 	                                    $datas = $db->select("tipo_cobranza",["id", "nombre"], ["estatus" => "1", "ORDER" => "nombre ASC"]);
 	                                    ?>
 	                                    <label for="cmbTipoCobranza">Tipo de Cobranza</label>
