@@ -1,8 +1,46 @@
 <?php
+/*
+
+EL MENU MUESTRA LAS OPCIONES DISPONIBLES DEPENDIENDO DEL TIPO DE USUARIO QUE INGRESE.
+
+$permisosDisponibles[ID-PERMISO-USUARIO][OPCIONES-DISPONIBLES] ARRAY QUE CONTIENE LAS OPCIONES DISPONIBLES DE CADA TIPO DE USUARIO QUE INGRESE
+
+*/
+$idTipoUsuario = $_SESSION["usuario"]["idTipoUsuario"];
+$permisosDisponibles =  [
+                            "0" => "Ventas en proceso",
+                            "1" => "Nueva venta",
+                            "2" => "Historico de ventas",
+                            "3" => "Clientes", 
+                            "4" => "Usuarios", 
+                            "5" => "Bancos",
+                            "6" => "Puntos virtuales", 
+                            "7" => "Reportes",
+                            "8" => "Reportes internos",
+                            "9" => "Estados de cuenta",  
+                        ];
+$permimosPorTipo = [
+                        "1" => [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",],
+                        "2" => [ "0", "1", "2", "7", "9", ],
+                        "3" => [ "0", "1", "2", "7", ],
+                        "4" => [ "0", "2", "8", ],
+                        "5" => [ "0", "1", "2", "7", "9", ],
+                   ];              
+
 function activaMenu( $seccion, $valor ) {
 	if ( $seccion == $valor ) {
 		return "active";
 	}
+}
+
+function mostrarOpcion ( $opcion, $valor ) {
+    
+    if  ( in_array( $opcion, $valor ) ) {
+        return true;        
+    } else {
+        return false;
+    }
+
 }
 ?>
 <section class="sidebar">
@@ -10,25 +48,22 @@ function activaMenu( $seccion, $valor ) {
     <div class="user-panel">
         
     </div>
-    <!-- search form 
-    <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-            <input type="text" name="q" class="form-control" placeholder="Buscar..."/>
-            <span class="input-group-btn">
-                <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-            </span>
-        </div>
-    </form>-->
-    <!-- /.search form -->
-    <!-- sidebar menu: : style can be found in sidebar.less -->
+
     <ul class="sidebar-menu">
+        <?php
+        //OPCION 0
+        if ( mostrarOpcion(0, $permimosPorTipo[$idTipoUsuario]) ) {
+        ?>
+
         <li class="<?=activaMenu($_SESSION["seccion"], 0)?>">
             <a href="home.php">
                 <i class="fa fa-line-chart"></i> <span>Ventas en Proceso</span>
             </a>
         </li>
         <?php
-        if ( $_SESSION["usuario"]["idTipoUsuario"] != 4 ) {
+        }
+        //OPCION 1
+        if ( mostrarOpcion(1, $permimosPorTipo[$idTipoUsuario]) ) {
         ?>
         <li class="<?=activaMenu($_SESSION["seccion"], 1)?>">
             <a href="home.php?s=<?=cNuevaVenta;?>">
@@ -37,6 +72,8 @@ function activaMenu( $seccion, $valor ) {
         </li>
         <?php
         }
+        //OPCION 2
+        if ( mostrarOpcion(2, $permimosPorTipo[$idTipoUsuario]) ) {
         ?>
         <li class="<?=activaMenu($_SESSION["seccion"], 6)?>">
             <a href="home.php?s=<?=cOperaciones?>">
@@ -44,54 +81,73 @@ function activaMenu( $seccion, $valor ) {
             </a>
         </li>
         <?php
-        if ( $_SESSION["usuario"]["idTipoUsuario"] == 1 ) {
+        }  
+        //OPCION 3
+        if ( mostrarOpcion(3, $permimosPorTipo[$idTipoUsuario]) ) {
         ?>
-            <li class="treeview <?=activaMenu($_SESSION["seccion"], 2)?>">
-                <a href="#">
-                    <i class="fa fa-suitcase"></i>
-                    <span>Clientes</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="home.php?s=<?=cClientes;?>"><i class="fa fa-angle-double-right"></i> Buscar</a></li>
-                    <li><a href="home.php?s=<?=cAddClientes;?>"><i class="fa fa-angle-double-right"></i> Crear</a></li>
-                </ul>
-            </li>
-            <li class="treeview <?=activaMenu($_SESSION["seccion"], 3)?>">
-                <a href="#">
-                    <i class="fa fa-user"></i>
-                    <span>Usuarios</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="<?=$urlWebServiceClient;?>clienteUsuarios.php"><i class="fa fa-angle-double-right"></i> Buscar</a></li>
-                    <li><a href="home.php?s=<?=cAddUsuarios;?>"><i class="fa fa-angle-double-right"></i> Crear</a></li>
-                </ul>
-            </li>
-            <li class="treeview <?=activaMenu($_SESSION["seccion"], 4)?>">
-                <a href="#">
-                    <i class="fa fa-user"></i>
-                    <span>Bancos</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="home.php?s=<?=cBancos;?>"><i class="fa fa-angle-double-right"></i> Buscar</a></li>
-                    <li><a href="home.php?s=<?=cAddBancos;?>"><i class="fa fa-angle-double-right"></i> Crear</a></li>
-                </ul>
-            </li>
-            <li class="treeview <?=activaMenu($_SESSION["seccion"], 5)?>">
-                <a href="#">
-                    <i class="fa fa-user"></i>
-                    <span>Puntos Virtuales</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="home.php?s=<?=cVirtualPoints;?>"><i class="fa fa-angle-double-right"></i> Buscar</a></li>
-                    <li><a href="home.php?s=<?=cAddVirtualPoints;?>"><i class="fa fa-angle-double-right"></i> Crear</a></li>
-                </ul>
-            </li>
+        <li class="treeview <?=activaMenu($_SESSION["seccion"], 2)?>">
+            <a href="#">
+                <i class="fa fa-suitcase"></i>
+                <span>Clientes</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="home.php?s=<?=cClientes;?>"><i class="fa fa-angle-double-right"></i> Buscar</a></li>
+                <li><a href="home.php?s=<?=cAddClientes;?>"><i class="fa fa-angle-double-right"></i> Crear</a></li>
+            </ul>
+        </li>
         <?php
-        }
+        }  
+        //OPCION 4
+        if ( mostrarOpcion(4, $permimosPorTipo[$idTipoUsuario]) ) {
+        ?>
+        <li class="treeview <?=activaMenu($_SESSION["seccion"], 3)?>">
+            <a href="#">
+                <i class="fa fa-user"></i>
+                <span>Usuarios</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="<?=$urlWebServiceClient;?>clienteUsuarios.php"><i class="fa fa-angle-double-right"></i> Buscar</a></li>
+                <li><a href="home.php?s=<?=cAddUsuarios;?>"><i class="fa fa-angle-double-right"></i> Crear</a></li>
+            </ul>
+        </li>
+        <?php
+        }  
+        //OPCION 5
+        if ( mostrarOpcion(5, $permimosPorTipo[$idTipoUsuario]) ) {
+        ?>
+        <li class="treeview <?=activaMenu($_SESSION["seccion"], 4)?>">
+            <a href="#">
+                <i class="fa fa-user"></i>
+                <span>Bancos</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="home.php?s=<?=cBancos;?>"><i class="fa fa-angle-double-right"></i> Buscar</a></li>
+                <li><a href="home.php?s=<?=cAddBancos;?>"><i class="fa fa-angle-double-right"></i> Crear</a></li>
+            </ul>
+        </li>
+        <?php
+        }  
+        //OPCION 6
+        if ( mostrarOpcion(6, $permimosPorTipo[$idTipoUsuario]) ) {
+        ?>
+        <li class="treeview <?=activaMenu($_SESSION["seccion"], 5)?>">
+            <a href="#">
+                <i class="fa fa-user"></i>
+                <span>Puntos Virtuales</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="home.php?s=<?=cVirtualPoints;?>"><i class="fa fa-angle-double-right"></i> Buscar</a></li>
+                <li><a href="home.php?s=<?=cAddVirtualPoints;?>"><i class="fa fa-angle-double-right"></i> Crear</a></li>
+            </ul>
+        </li>
+        <?php
+        }  
+        //OPCION 7
+        if ( mostrarOpcion(7, $permimosPorTipo[$idTipoUsuario]) ) {
         ?>
         <li class="treeview <?=activaMenu($_SESSION["seccion"], 7)?>">
             <a href="#">
@@ -104,7 +160,24 @@ function activaMenu( $seccion, $valor ) {
             </ul>
         </li>
         <?php
-        if ( $_SESSION["usuario"]["idTipoUsuario"] <= 2 ) {
+        }  
+        //OPCION 8
+        if ( mostrarOpcion(8, $permimosPorTipo[$idTipoUsuario]) ) {
+        ?>
+        <li class="treeview <?=activaMenu($_SESSION["seccion"], 7)?>">
+            <a href="#">
+                <i class="fa fa-user"></i>
+                <span>Reportes</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="home.php?s=<?=cReporteGeneral;?>"><i class="fa fa-angle-double-right"></i> General</a></li>
+            </ul>
+        </li>
+        <?php
+        }  
+        //OPCION 9
+        if ( mostrarOpcion(9, $permimosPorTipo[$idTipoUsuario]) ) {
         ?>
             <li class="treeview <?=activaMenu($_SESSION["seccion"], 10)?>">
                 <a href="#">
