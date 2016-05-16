@@ -60,6 +60,19 @@ switch ( $session ) {
 		include 'reportegeneral.php';
 	break;
 
+	case cReporteIntComisionesMes:
+		include 'reporte_int_comisiones_mes.php';
+	break;
+	case cReporteIntComisionesRango:
+		include 'reporte_int_comisiones_rango.php';
+	break;
+	case cReporteIntComisionesVendedor:
+		include 'reporte_int_comisiones_vendedor.php';
+	break;
+	case cReporteIntComisionesTotales:
+		include 'reporte_int_comisiones_totales.php';
+	break;
+
 	case cEstadoCuenta:
 		include 'estado_cuenta.php';
 	break;

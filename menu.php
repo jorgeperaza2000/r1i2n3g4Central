@@ -167,11 +167,14 @@ function mostrarOpcion ( $opcion, $valor ) {
         <li class="treeview <?=activaMenu($_SESSION["seccion"], 7)?>">
             <a href="#">
                 <i class="fa fa-user"></i>
-                <span>Reportes</span>
+                <span>Reportes Internos</span>
                 <i class="fa fa-angle-left pull-right"></i>
             </a>
             <ul class="treeview-menu">
-                <li><a href="home.php?s=<?=cReporteGeneral;?>"><i class="fa fa-angle-double-right"></i> General</a></li>
+                <li><a href="home.php?s=<?=cReporteIntComisionesMes;?>"><i class="fa fa-angle-double-right"></i> Comisiones Mes</a></li>
+                <li><a href="home.php?s=<?=cReporteIntComisionesRango;?>"><i class="fa fa-angle-double-right"></i> Comisiones Rango</a></li>
+                <li><a href="home.php?s=<?=cReporteIntComisionesVendedor;?>"><i class="fa fa-angle-double-right"></i> Comisiones Vendedores</a></li>
+                <li><a href="home.php?s=<?=cReporteIntComisionesTotales;?>"><i class="fa fa-angle-double-right"></i> Comisiones Totales</a></li>
             </ul>
         </li>
         <?php

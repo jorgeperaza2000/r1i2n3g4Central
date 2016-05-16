@@ -39,6 +39,7 @@ function fnGenerica( $codOperacion, $nombre, $email, $numControl, $monto, $idVir
         
         if ( $existHash ) //SI EXISTE EL HASH SE PROCEDE CON EL PROCESO DE LOGIN
         {
+            $datosCliente = $db->get("clientes", ["idVendedor", "tasa", "distribucionInterna", "distribucionVendedor"], ["id" => $idCliente]);
 
             $datos = $db->insert("operaciones_h", [
                                         "codOperacion" => $codOperacion,
@@ -50,6 +51,10 @@ function fnGenerica( $codOperacion, $nombre, $email, $numControl, $monto, $idVir
                                         "duracionOperaciones" => $duracionOperaciones,
                                         "idUsuario" => $idUsuario,
                                         "idCliente" => $idCliente,
+                                        "idVendedor" => $datosCliente["idVendedor"],
+                                        "tasa" => $datosCliente["tasa"],
+                                        "distribucionInterna" => $datosCliente["distribucionInterna"],
+                                        "distribucionVendedor" => $datosCliente["distribucionVendedor"],
                                         "#fecCreacion" => "NOW()",
                                         "estatus" => "1"
                                         ]); 

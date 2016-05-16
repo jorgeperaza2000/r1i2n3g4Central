@@ -69,7 +69,14 @@
                                                 <td><?=$data["personaContacto"]?></td>
                                                 <td><?=buscaNombre($db, "tipo_cobranza", $data["idTipoCobranza"])?></td>
                                                 <td><?=estatus($data["estatus"])?></td>
-                                                <td>
+                                                <td align="right">
+                                                    <?php
+                                                    if ( $data["imagen"] != "" ){
+                                                    ?>
+                                                        <a href="<?=$data["imagen"]?>" target="_blank"><i class="fa fa-file-image-o"></i></a>
+                                                    <?php    
+                                                    }
+                                                    ?>
                                                 	<a href="home.php?s=<?=cEditClientes?>&id=<?=$data["id"]?>"><i class="fa fa-pencil-square-o"></i></a>
                                                 	<a href="includes/functions.php?op=estatus&id=<?=$data["id"]?>&e=<?=$data["estatus"]?>&tabla=clientes"><i class="<?=muestraToggle($data["estatus"])?>"></i></a>
                                                 	<a href="includes/functions.php?op=delete&id=<?=$data["id"]?>&tabla=clientes"><i class="fa fa-remove"></i></a>

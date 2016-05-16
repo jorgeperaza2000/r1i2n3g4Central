@@ -31,6 +31,7 @@
                                             	<th>Id</th>
                                                 <th>Codigo</th>
                                                 <th>Cliente</th>
+                                                <th>Tarjetahabiente</th>
                                                 <th>Factura</th>
                                                 <th>Tiempo</th>
                                                 <th>Monto</th>
@@ -41,14 +42,8 @@
                                         </thead>
                                         <tbody>
                                             <?php
-                                            if ( $_SESSION["usuario"]["idTipoUsuario"] == 1 ) {
-                                            	$datas = $db->select("operaciones", "*", ["ORDER" => "id DESC" ]);
-                                            } else {
-                                            	$datas = $db->select("operaciones", "*", ["AND" =>[
-													"idCliente" => $_SESSION["usuario"]["idCliente"]
-													
-												], "ORDER" => "id DESC" ]);
-                                            }
+                                            
+                                            $datas = operaciones_PorTipoUsuario($db);
                                             
 											foreach ($datas as $data) {
 												$datetime1 = strtotime($data["fecCreacion"]);
@@ -64,6 +59,7 @@
                                             <tr>
                                             	<td><?=$data["id"]?></td>
                                             	<td><b><?=$data["codOperacion"]?></b></td>
+                                                <td><?=$data["idCliente"]?></td>
                                                 <td><?=$data["nombre"]?></td>
                                                 <td><?=$data["numControl"]?></td>
                                                 <td><?=$vigencia?><p>Historico en <?=$duracionOperacion-number_format($horas, 0);?> Hrs.</p></td>

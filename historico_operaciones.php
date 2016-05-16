@@ -68,63 +68,79 @@
                                         </thead>
                                         <tbody>
                                             <?php
-                                            if ( !isset( $_POST["txtBuscar"] ) ) {
-								                if ( $_SESSION["usuario"]["idTipoUsuario"] == 1 ) {
-									                $datas = $db->select("operaciones_h", "*", ["LIMIT" => 5, "ORDER" => "id DESC" ]);
-												} else {
-													$datas = $db->select("operaciones_h", "*", ["AND" =>[
-															"idCliente" => $_SESSION["usuario"]["idCliente"]
-														], "LIMIT" => 5, "ORDER" => "id DESC" ]);
-												}
-											} else {
-												$condicionCodOperacion = "";
-												$condicionDocIdentidad = "";
-												
-												if ($_POST["txtCodOperacion"] != "") {
-													$condicionCodOperacion = "AND codOperacion LIKE '%" . $_POST["txtCodOperacion"] . "%'";
-												}
-												if ($_POST["txtDocIdentidad"] != "") {
-													$condicionDocIdentidad = "AND docIdentidad LIKE '%" . $_POST["txtDocIdentidad"] . "%'";
-												}
-												$fechaDesde = ($_POST["txtFecDesde"] != "")?"'".date("Y-m-d", strtotime($_POST["txtFecDesde"]))."'":"";
-												$fechaHasta = ($_POST["txtFecHasta"] != "")?"'".date("Y-m-d", strtotime($_POST["txtFecHasta"]))."'":"";
-												$condicFecha = "";
-												if ( ( $fechaDesde != "" ) && ( $fechaHasta != "" ) ) {
-													$condicFecha = "AND 
-																	(DATE_FORMAT(fecCreacion,'%Y-%m-%d') BETWEEN " . $fechaDesde . " 
-																	AND " . $fechaHasta . ") ";
-												}
-												if ( $_SESSION["usuario"]["idTipoUsuario"] == 1 ) {
-													$cliente = " 1 = 1 ";
-												} else {
-													$cliente = "idCliente = '" . $_SESSION["usuario"]["idCliente"] . "'";
-												}
-												
-												$datas = $db->query("SELECT * FROM operaciones_h WHERE 
-																		" . $cliente . " " .
-																		$condicionCodOperacion . " " .
-																		$condicionDocIdentidad . " " .
-																		$condicFecha . " 
-																		ORDER BY id DESC")->fetchAll();
-											}
-											foreach ($datas as $data) {
+                                            if ( !isset( $_POST["txtBuscar"] ) ) 
+                                            {
                                             ?>
-	                                            <tr>
-	                                            	<td><?=$data["id"]?></td>
-	                                            	<td><b><?=$data["codOperacion"]?></b></td>
-	                                                <td><?=$data["nombre"]?><p><?=$data["docIdentidad"]?></p></td>
-	                                                <td><?=$data["numControl"]?></td>
-	                                                <td><?=$data["fecCreacion"]?></td>
-	                                                <td><?=$data["estatus"]?></td>
-	                                                <td><?=$data["numAutorizacion"]?></td>
-	                                                <td><?=$data["monto"]?></td>
-	                                                <td align="center">
-	                                                	<a data-ajax="false" href="voucher.php?id=<?=base64_encode($data['id'])?>" target="_blank" ><i title="Ver Voucher" class="fa fa-ticket fa-2x"></i></a>
-	                                                </td>
+                                            	
+                                            	<tr>
+	                                            	<td align="center" colspan="9">Seleccione algunos criterios de busqueda</td>
 	                                            </tr>
-                                            <?php
-											}
-											?>
+
+	                                        <?php
+	                                    	} else
+	                                    	{
+	                                        	
+	                                        	$condicionCodOperacion = null;
+	                                        	$condicionDocIdentidad = null;
+	                                        	$condicFechaDesde = null;
+	                                        	$condicFechaHasta = null;
+	                                        	if ( $txtCodOperacion != "" ) 
+	                                        	{
+													$condicionCodOperacion = " AND codOperacion LIKE '%" . $txtCodOperacion . "%' ";
+												}
+	                                        	if ( $txtDocIdentidad != "" ) 
+	                                        	{
+													$condicionDocIdentidad = " AND docIdentidad LIKE '%" . $txtDocIdentidad . "%' ";
+												}
+												$fechaDesde = ($txtFecDesde != "")?"'".date("Y-m-d", strtotime($txtFecDesde))."'":"";
+												$fechaHasta = ($txtFecHasta != "")?"'".date("Y-m-d", strtotime($txtFecHasta))."'":"";
+
+												if ( $fechaDesde != "" )
+												{
+													$condicFechaDesde = " AND DATE_FORMAT(fecCreacion,'%Y-%m-%d') >= " . $fechaDesde . " ";
+												}
+												if ( $fechaHasta != "" )
+												{
+													$condicFechaHasta = " AND DATE_FORMAT(fecCreacion,'%Y-%m-%d') <= " . $fechaHasta . " ";
+												}
+
+	                                        	$datas = operaciones_h_PorTipoUsuario(false, $db, $condicionCodOperacion, $condicionDocIdentidad, $condicFechaDesde, $condicFechaHasta);
+	                                        	//pr ($datas);
+	                                        	$totalAprobado = 0;
+											
+												foreach ($datas as $data) {
+													if ( $data["estatus"] === 'Autorizada' ) 
+													{
+													
+														$totalAprobado = $totalAprobado + $data["monto"];
+													
+													}
+	                                            ?>
+		                                            <tr>
+		                                            	<td><?=$data["id"]?></td>
+		                                            	<td><b><?=$data["codOperacion"]?></b></td>
+		                                                <td><?=$data["nombre"]?><p><?=$data["docIdentidad"]?></p></td>
+		                                                <td><?=$data["numControl"]?></td>
+		                                                <td><?=$data["fecCreacion"]?></td>
+		                                                <td><?=$data["estatus"]?></td>
+		                                                <td><?=$data["numAutorizacion"]?></td>
+		                                                <td align="right"><?=number_format($data["monto"],2,',','.')?></td>
+		                                                <td align="center">
+		                                                	<a data-ajax="false" href="voucher.php?id=<?=base64_encode($data['id'])?>" target="_blank" ><i title="Ver Voucher" class="fa fa-ticket fa-2x"></i></a>
+		                                                </td>
+		                                            </tr>
+	                                            <?php
+												}
+												?>
+													<tr>
+		                                            	<td colspan="7" align="right">Total Autorizadas:</td>
+		                                            	<td align="right"><?=number_format($totalAprobado,2,',','.')?></td>
+		                                            	<td></td>
+		                                            </tr>
+		                                    <?php
+	                                    	}	
+											?>	
+											
                                         </tbody>
                                     </table>
                                 </div><!-- /.box-body -->

@@ -25,7 +25,7 @@
                                     <h3 class="box-title">Datos del Cliente</h3>
                                 </div><!-- /.box-header -->
                                 <!-- form start -->
-                                <form role="form" action="includes/functions.php?op=editCliente&id=<?=$_GET["id"]?>" method="post">
+                                <form role="form" action="includes/functions.php?op=editCliente&id=<?=$_GET["id"]?>" method="post" enctype="multipart/form-data">
                                     <div class="box-body">
                                         
                                         <div class="form-group">
@@ -35,6 +35,12 @@
                                         <div class="form-group">
 	                                        <label for="txtRif">RIF</label>
 	                                        <input type="text" name="txtRif" id="txtRif" value="<?=$reg["rif"];?>" class="form-control" placeholder="RIF">
+	                                    </div>
+	                                    <div class="form-group">
+	                                        <label for="txtRif">Contrato</label>
+	                                        <input type="file" name="txtContrato" id="txtContrato">
+	                                        <p class="help-block"><a href="<?=$reg["imagen"]?>" target="_blank"><?=$reg["imagen"]?></a></p>
+	                                        <p class="help-block">Por favor seleccione el contrato del cliente</p>
 	                                    </div>
 	                                    <?php
 	                                    $datas = $db->select("localidades",["id", "nombre"], ["tabla" => "estado", "ORDER" => "nombre ASC"]);
@@ -103,8 +109,13 @@
 	                                        ?>
 	                                    </select>
 	                                    <div class="form-group">
-	                                        <label for="txtTasa">Tasa</label>
+	                                        <label for="txtTasa">Tasa %</label>
 	                                        <input type="text" name="txtTasa" value="<?=$reg["tasa"];?>" id="txtTasa" class="form-control" placeholder="Tasa segun Tipo de Cobranza">
+	                                    </div>
+	                                    <div class="form-group">
+	                                        <label for="txtDistribucionOriantech">Distribucion %</label>
+	                                        <input type="text" name="txtDistribucionInterna" value="<?=$reg["distribucionInterna"];?>" id="txtDistribucionInterna" class="form-control" placeholder="Distribucion Interna">
+	                                        <input type="text" name="txtDistribucionVendedor" value="<?=$reg["distribucionVendedor"];?>" id="txtDistribucionVendedor" class="form-control" placeholder="Distribucion Vendedor">
 	                                    </div>
 	                                    <div class="form-group">
 	                                        <label for="txtIntervalo">Intervalo de cobro (Meses)</label>
@@ -132,9 +143,62 @@
     </body>
 </html>
 <script type="text/javascript">
-	$(document).ready(function(){
-		$("#cmbEstado").trigger("change");
+$(document).ready(function(){
+	$("#cmbEstado").trigger("change");
 
-		$("#txtFecActivacion").inputmask("dd-mm-yyyy", {"placeholder": "dd-mm-yyyy"});
-	});
+	$("#txtFecActivacion").inputmask("dd-mm-yyyy", {"placeholder": "dd-mm-yyyy"});
+
+	$("#txtTasa")
+		.focusout(function(){
+		
+			//EJEMPLO: t=tasa, do=distrubucion orianech, dv=distribucion vendedor d=distrubucion para mayores a 1
+
+			var $tasaDistribucionInterna  = 0.8; //Tasa de distrubucion en base a 1
+			var $tasaDistribucionVendedor   = 0.2; //Tasa de distrubucion en base a 1
+			var $tasaDistribucion           = 0.5; //Tasa generica para valores mayores que 1 
+
+			var $distInterna;
+			var $distVendedor;
+
+			if ( $("#txtTasa").val() <= 1 ) 
+			{
+				$distInterna  = $("#txtTasa").val() * $tasaDistribucionInterna;
+				$distVendedor   = $("#txtTasa").val() * $tasaDistribucionVendedor;
+
+				$("#txtDistribucionInterna").val($distInterna.toFixed(2));
+				$("#txtDistribucionVendedor").val($distVendedor.toFixed(2));
+			} else if ( $("#txtTasa").val() > 1 ) 
+			{
+
+				$distInterna  = $tasaDistribucionInterna;
+				$distVendedor   = $tasaDistribucionVendedor;
+
+				$distInterna  = $distInterna + ( $("#txtTasa").val() - 1 ) * $tasaDistribucion;
+				$distVendedor   = $distVendedor + ( $("#txtTasa").val() - 1 ) * $tasaDistribucion;				
+
+				$("#txtDistribucionInterna").val($distInterna.toFixed(2));
+				$("#txtDistribucionVendedor").val($distVendedor.toFixed(2));
+			}
+		})
+		.focusin(function(){
+			$("#txtDistribucionInterna").val('');
+			$("#txtDistribucionVendedor").val('');
+		});
+
+		$("#frmEditarCliente").on("submit", function(){
+			if ( ( $("#txtDistribucionInterna").val() + $("#txtDistribucionVendedor").val() ) != $("#txtTasa").val() ) 
+			{
+				
+				alert ("La distribucion no concuerda con la tasa, por favor verifique");
+				$("#txtDistribucionInterna").focus();
+				return false;
+
+			} else 
+			{
+
+				$("#frmEditarCliente").submit();
+
+			}
+		});
+});
 </script>

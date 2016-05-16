@@ -32,7 +32,7 @@ array_push( $mensajeUsuarios["success"],
             "Usuario eliminado con exito"
            );
 
-//WEBSERVICE USUARIOS
+//WEBSERVICE TRANSACCIONES
 $mensajeTransacciones = ["errors" => [], "success" => []];
 array_push( $mensajeTransacciones["errors"], 
             "Hash invalido",
@@ -42,5 +42,5 @@ array_push( $mensajeTransacciones["errors"],
             "Ocurrio un error en el webservice, contacte al administrador del sistema"
            );
 array_push( $mensajeTransacciones["success"], 
-            "Transaccion exitosa"
+            "Transaccion creada con exito."
            );

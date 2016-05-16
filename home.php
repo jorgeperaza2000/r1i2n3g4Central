@@ -92,7 +92,7 @@ include "includes/db.php";
                                 <span class="label label-success"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li class="header">No posees mensajes</li>
+                                <li class="header">No posee mensajes</li>
                                 <li>
                                     <!-- inner menu: contains the actual data
                                     <ul class="menu">

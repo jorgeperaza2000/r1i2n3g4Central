@@ -76,6 +76,8 @@ switch ( $_GET["op"] ) {
 										"idVendedor" => $_POST["cmbVendedor"],
 										"idTipoCobranza" => $_POST["cmbTipoCobranza"],
 										"tasa" => $_POST["txtTasa"],
+										"distribucionInterna" => $_POST["txtDistribucionInterna"],
+										"distribucionVendedor" => $_POST["txtDistribucionVendedor"],
 										"intervalo" => $_POST["txtIntervalo"],
 										"montoAfiliacion" => $_POST["txtMontoAfiliacion"],
 										"duracionOperaciones" => $_POST["txtDuracionOperaciones"],
@@ -85,11 +87,47 @@ switch ( $_GET["op"] ) {
 										"fecActivacion" => $txtFecActivacion,
 										"estatus" => "1",
 										]);
+		if ( $_FILES['txtContrato']['name'] != "" ) 
+		{
+			$dir_subida = '../img/clientFiles/';
+			$dir_db = 'img/clientFiles/';
+			$fichero_subido = $dir_subida . $last_operacion_id . "." . end( explode('.', $_FILES['txtContrato']['name']) );
+			$fichero_subido_db = $dir_db . $last_operacion_id . "." . end( explode('.', $_FILES['txtContrato']['name']) );
+
+			if ( file_exists( $fichero_subido ) ) 
+			{
+				unlink($fichero_subido);
+			}
+			move_uploaded_file($_FILES['txtContrato']['tmp_name'], $fichero_subido);
+
+			$last_operacion_id = $db->update("clientes", [
+											"imagen" => $fichero_subido_db,
+											],
+											["id" => $last_operacion_id ]);
+		}
+
 		header("location: ../home.php?s=" . cClientes);
 	break;
 	case "editCliente":
 		$txtFecActivacion = ( $_POST["txtFecActivacion"] == "" )?null:date("Y-m-d", strtotime($_POST["txtFecActivacion"]));
+		
+		if ( $_FILES['txtContrato']['name'] != "" ) 
+		{
+			$dir_subida = '../img/clientFiles/';
+			$dir_db = 'img/clientFiles/';
+			$fichero_subido = $dir_subida . $_GET["id"] . "." . end( explode('.', $_FILES['txtContrato']['name']) );
+			$fichero_subido_db = $dir_db . $_GET["id"] . "." . end( explode('.', $_FILES['txtContrato']['name']) );
 
+			if ( file_exists( $fichero_subido ) ) 
+			{
+				unlink($fichero_subido);
+			} 
+			move_uploaded_file($_FILES['txtContrato']['tmp_name'], $fichero_subido);
+			$last_operacion_id = $db->update("clientes", [
+											"imagen" => $fichero_subido_db,
+											],
+											["id" => $_GET["id"] ]);
+		}
 		$last_operacion_id = $db->update("clientes", [
 										"nombre" => $_POST["txtNombre"],
 										"rif" => $_POST["txtRif"],
@@ -103,6 +141,8 @@ switch ( $_GET["op"] ) {
 										"idVendedor" => $_POST["cmbVendedor"],
 										"idTipoCobranza" => $_POST["cmbTipoCobranza"],
 										"tasa" => $_POST["txtTasa"],
+										"distribucionInterna" => $_POST["txtDistribucionInterna"],
+										"distribucionVendedor" => $_POST["txtDistribucionVendedor"],
 										"montoAfiliacion" => $_POST["txtMontoAfiliacion"],
 										"intervalo" => $_POST["txtIntervalo"],
 										"idUsuario" => $_SESSION["usuario"]["id"],
@@ -230,7 +270,7 @@ switch ( $_GET["op"] ) {
 		$idEstado = $_POST["idEstado"];
 		$datas = $db->select("localidades",["id", "nombre"], ["AND" => ["tabla" => "municipio", "localidad_id" => $idEstado], "ORDER" => "nombre ASC"]);
 		foreach ( $datas as $data ) {
-        	$salida .= '<option value=' . $data["id"] . '">' . $data["nombre"] . '</option>';
+        	$salida .= '<option value="' . $data["id"] . '">' . $data["nombre"] . '</option>';
 		}
 		echo $salida;
 	break;

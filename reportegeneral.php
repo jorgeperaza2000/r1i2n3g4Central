@@ -22,9 +22,10 @@
                                 </div><!-- /.box-header -->
                                 <div class="box-body table-responsive">
                                 	<?php
-                                	$txtFecDesde = isset($_POST["txtFecDesde"])?$_POST["txtFecDesde"]:date("d-m-Y");
-                                	$txtFecHasta = isset($_POST["txtFecHasta"])?$_POST["txtFecHasta"]:date("d-m-Y");
-                                	$cboTransaccion = isset($_POST["cboTransaccion"])?$_POST["cboTransaccion"]:"";
+                                	$txtFecDesde = isset($_POST["txtFecDesde"])?$_POST["txtFecDesde"]:"";
+                                	$txtFecHasta = isset($_POST["txtFecHasta"])?$_POST["txtFecHasta"]:"";
+                                	$cboEstatus = isset($_POST["cboEstatus"])?$_POST["cboEstatus"]:"0";
+                                	$cboCliente = isset($_POST["cboCliente"])?$_POST["cboCliente"]:"0";
                                 	?>
 									<form name="frmFiltroOperaciones" method="post" action="#">
 										<input type="hidden" name="txtBuscar" value="1">
@@ -38,15 +39,34 @@
 												</tr>
 												<tr>
 													<td style="vertical-align: middle !important;">
-														<label for="cboTransaccion">Transaccion</label>
-														<select name="cboTransaccion" id="cboTransaccion" class="form-control" >
-															<option <?=($cboTransaccion==0)?"selected":"";?> value="0">-- Todas --</option>
-															<option <?=($cboTransaccion==4)?"selected":"";?> value="4">No Autorizada</option>
-															<option <?=($cboTransaccion==5)?"selected":"";?> value="5">Autorizada</option>
-														</select>							
+														<label for="cboEstatus">Estatus</label>
+														<select name="cboEstatus" id="cboEstatus" class="form-control" >
+															<option <?=($cboEstatus==0)?"selected":"";?> value="0">-- Todas --</option>
+															<option <?=($cboEstatus==4)?"selected":"";?> value="4">No Autorizada</option>
+															<option <?=($cboEstatus==5)?"selected":"";?> value="5">Autorizada</option>
+														</select>
 													</td>
 													<td style="vertical-align: middle !important;"></td>
-													<td style="vertical-align: middle !important;"></td>
+													<td style="vertical-align: middle !important;">
+														<label for="cboCliente">Cliente</label>
+														<select name="cboCliente" id="cboCliente" class="form-control" >
+															<option <?=($cboCliente==0)?"selected":"";?> value="0">-- Todos --</option>
+															<?php
+															if ( $_SESSION["usuario"]["idTipoUsuario"] == 1 ) { //PUEDE VER LAS OPERACIONES
+																$combos = $db->select("clientes", "*", ["estatus" => 1]);
+															} else if ( $_SESSION["usuario"]["idTipoUsuario"] == 5 ) { //PUEDE VER LAS OPERACIONES DE TODOS SUS CLIENTES
+																$combos = $db->select("clientes","*",["AND" => ["estatus" => 1, "idVendedor" => $_SESSION["usuario"]["id"]]]);
+															} else { //SOLO PUEDE VER SUS OPERACIONES
+																$combos = $db->select("clientes","*", ["AND" => ["estatus" => 1, "id" => $_SESSION["usuario"]["idCliente"]]]);
+															}
+															foreach ($combos as $combo) {
+															?>
+																<option <?=($cboCliente == $combo["id"])?"selected":"";?> value="<?=$combo["id"]?>"><?=$combo["nombre"]?></option>
+															<?php
+															}
+															?>
+														</select>
+													</td>
 													<td style="vertical-align: middle !important;"></td>
 												</tr>
 												<tr>
@@ -65,10 +85,11 @@
                                         <thead>
                                             <tr>
                                                 <th>Id</th>
+									            <th>Cliente</th>
 									            <th>Codigo</th>
 									            <th>Factura</th>
 									            <th>Fecha</th>
-									            <th>Cliente</th>
+									            <th>Tarjetahabiente</th>
 									            <th>Num. Tarjeta</th>
 									            <th>Fecha Oper.</th>
 									            <th>Estatus</th>
@@ -78,73 +99,82 @@
                                         </thead>
                                         <tbody>
                                             <?php
-                                            $datas = "";
+                                            $totalAprobado = 0;
                                             if ( count( $_POST ) == 0 ) {
 								            ?>
 								            	<tr>
-	                                            	<td align="center" colspan="9">Seleccione algunos criterios de busqueda</td>
+	                                            	<td align="center" colspan="11">Seleccione algunos criterios de busqueda</td>
 	                                            </tr>
 								            <?php
 											} else {
-												$_SESSION["temp"]["POST"] = $_POST;
-												$condicionCboTransaccion = "";
-												
-												if ($_POST["cboTransaccion"] != 0) {
-													$condicionCboTransaccion = "AND estatus = " . $_POST["cboTransaccion"];
-												} else {
-													$condicionCboTransaccion = "AND estatus NOT IN (1,2,3)";
+												$condicFechaDesde = null;
+												$condicFechaHasta = null;
+												$condicionCboEstatus = null;
+												$condicionCboCliente = null;
+
+												if ( $cboEstatus != 0 ) 
+												{
+													$condicionCboEstatus = " AND estatus = " . $cboEstatus . " ";
+												} else 
+												{
+													$condicionCboEstatus = " AND estatus NOT IN (1,2,3) ";
 												}
-												$fechaDesde = ($_POST["txtFecDesde"] != "")?"'".date("Y-m-d", strtotime($_POST["txtFecDesde"]))."'":date("Y-m-d");
-												$fechaHasta = ($_POST["txtFecHasta"] != "")?"'".date("Y-m-d", strtotime($_POST["txtFecHasta"]))."'":date("Y-m-d");
-												$condicFecha = "";
-												if ( ( $fechaDesde != "" ) && ( $fechaHasta == "" ) ) {
-													$condicFecha = "AND 
-																	(DATE_FORMAT(fecCreacion,'%Y-%m-%d') >= " . $fechaDesde . ") ";
+												if ( $cboCliente != 0 ) 
+												{
+													$condicionCboCliente = " AND idCliente = " . $cboCliente . " ";
 												}
-												if ( ( $fechaDesde != "" ) && ( $fechaHasta != "" ) ) {
-													$condicFecha = "AND 
-																	(DATE_FORMAT(fecCreacion,'%Y-%m-%d') BETWEEN " . $fechaDesde . " 
-																	AND " . $fechaHasta . ") ";
+												$fechaDesde = ($_POST["txtFecDesde"] != "")?date("Y-m-d", strtotime($_POST["txtFecDesde"])):"";
+												$fechaHasta = ($_POST["txtFecHasta"] != "")?date("Y-m-d", strtotime($_POST["txtFecHasta"])):"";
+
+												if ( $fechaDesde != "" ) 
+												{
+													$condicFechaDesde = " AND DATE_FORMAT(fecCreacion,'%Y-%m-%d') >= '" . $fechaDesde . "' ";
 												}
-												if ( $_SESSION["usuario"]["idTipoUsuario"] == 1 ) {
-													$cliente = " 1 = 1 ";
-												} else {
-													$cliente = "idCliente = '" . $_SESSION["usuario"]["idCliente"] . "'";
+												if ( $fechaHasta != "" ) 
+												{
+													$condicFechaHasta = " AND DATE_FORMAT(fecCreacion,'%Y-%m-%d') <= '" . $fechaHasta . "' ";
 												}
-												
-												$datas = $db->query("SELECT * FROM operaciones_h WHERE 
-																		" . $cliente . " " .
-																		$condicionCboTransaccion . " " .
-																		$condicFecha . " 
-																		ORDER BY id DESC")->fetchAll();
-												if ( count( $datas ) == 0 ) {
+
+												$datas = operaciones_h_PorTipoUsuario(true, $db, null, null, $condicFechaDesde, $condicFechaHasta, $condicionCboCliente, $condicionCboEstatus);
+
+												if ( count( $datas ) == 0 ) 
+												{
 												?>
 													<tr>
-		                                            	<td align="center" colspan="9">No se encontraron coincidencias</td>
+		                                            	<td align="center" colspan="11">No se encontraron coincidencias</td>
 		                                            </tr>
 												<?php	
 												} else {
-													$_SESSION["query"] = $datas;
-													foreach ($datas as $data) {
-	                                            		$tarjeta = ($data["numTarjeta"]!="")?"XXXX-XXXX-XXXX-".substr($data["numTarjeta"], -4,4):"";
+													foreach ($datas as $data) 
+													{
+														
+														if ( $data["estatus"] === 'Autorizada' ) 
+														{
+															$totalAprobado = $totalAprobado + $data["monto"];
+														}
 										        ?>
 										                <tr>
 										                	<td><?=$data["id"]?></td>
+										                	<td><?=$data["idCliente"]?></td>
 										                	<td><b><?=$data["codOperacion"]?></b></td>
 										                    <td><?=$data["numControl"]?></td>
 										                    <td><?=date("d-m-Y h:i:s", strtotime($data["fecCreacion"]))?></td>
 										                    <td><?=$data["nombre"]?><p><?=$data["docIdentidad"]?></p></td>
-										                    <td><?=$tarjeta?></td>
+										                    <td><?=$data["numTarjeta"]?></td>
 										                    <td><?=date("d-m-Y h:i:s", strtotime($data["fecOperacion"]))?></td>
 										                    <td><?=$data["estatus"]?></td>
 										                    <td><?=$data["numAutorizacion"]?></td>
-										                    <td><?=$data["monto"]?></td>
+										                    <td align="right"><?=$data["monto"]?></td>
 										                </tr>
 	                                            <?php
 													}
 												}
 											}
 											?>
+												<tr>
+	                                            	<td colspan="10" align="right">Total Autorizadas:</td>
+	                                            	<td align="right"><?=number_format($totalAprobado,2,',','.')?></td>
+	                                            </tr>
                                         </tbody>
                                     </table>
                                 </div><!-- /.box-body -->
