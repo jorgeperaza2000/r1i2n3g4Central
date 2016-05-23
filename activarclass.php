@@ -1,5 +1,4 @@
 <?php
-
 $session = isset($_GET["s"])?$_GET["s"]:"";
 
 switch ( $session ) {
