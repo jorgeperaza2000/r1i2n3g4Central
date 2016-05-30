@@ -5,8 +5,8 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-$urlWebServiceServer = "http://app.pagaconring.com//r1i2n3g4Central/webservices/server/";
-$urlWebServiceClient = "http://app.pagaconring.com/r1i2n3g4Central/webservices/client/";
+$urlWebServiceServer = "http://localhost/r1i2n3g4Central/webservices/server/";
+$urlWebServiceClient = "http://localhost/r1i2n3g4Central/webservices/client/";
 //Secciones
 define('cPrincipal', 'iewkkjhsd');
 define('cCambioClave', 'yhiuweh');
@@ -155,7 +155,7 @@ function operaciones_h_PorTipoUsuario(
 	} else if ( $_SESSION["usuario"]["idTipoUsuario"] == 5 ) 
 	{
 	
-		$queryPpal = "SELECT * FROM operaciones_h WHERE idVendedor = " . $_SESSION["usuario"]["id"];
+		$queryPpal = "SELECT * FROM operaciones_h WHERE idCliente = " . $_SESSION["usuario"]["idCliente"] ." OR idVendedor = " . $_SESSION["usuario"]["id"];
 	
 	}
 	$queryPpal .= $condicionCodOperacion . $condicionDocIdentidad . $condicionFechaDesde . $condicionFechaHasta . $condicionCliente . $condicionEstatus . " ORDER BY id DESC";

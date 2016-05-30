@@ -12,7 +12,7 @@ include_once "includes/global.php";
 	<meta name="keywords" content="Template, Theme, web, html5, css3, Bootstrap,Bootstrap 3.0 Responsive Theme" />
 	<meta name="author" content="Mindfreakerstuff"/>
     <link rel="shortcut icon" href="favicon.png"> 
-     
+    
 	<title>Ring - Payment Gateway</title>
     <!-- Bootstrap core CSS -->
     <link href="css/login/bootstrap.css" rel="stylesheet">
@@ -41,22 +41,15 @@ include_once "includes/global.php";
 			        	</div> 
 			        	<hr />
 			        	<div class="login-form">
-			        					        		
-                            <?php
-                            showNotificacion();
-                            ?>
-							
-			        		<form name="frmLogin" action="<?=$urlWebServiceClient?>clienteLogin.php" method="post"  >
-						   		 <input type="text" name="txtUserName" placeholder="Usuario" required/> 
-						   		 <input type="password" name="txtPassword" placeholder="Contraseña" required/> 
-						   		 <div style="text-align:center; width: 100%; margin-bottom: 10px;"><button type="submit" class="btn btn-primary btn-lg">Aceptar</button></div>
-							</form>	
-							<div class="login-links"> 
-					            <a href="olvido.php">
-					          	   Olvidó su contraseña?
-					            </a>
-					            <br />
-							</div>      		
+			        	<?php
+                showNotificacion();
+                ?>
+							  <center><h4>Olvido su contraseña?</h4></center>
+			        		<form name="frmLogin" action="includes/functions.php?op=olvido" method="post"  >
+                       <input type="text" name="txtEmail" placeholder="Introduzca su email" required/> 
+    						   		 <div style="align:center; margin: auto; padding:28px;" class="g-recaptcha" data-sitekey="6LcZGSETAAAAAFUs-a3UOrrFDjYh32_lcc5Ouw10"></div>
+    						   		 <div style="text-align:center; width: 100%; margin-bottom: 10px;"><button type="submit" class="btn btn-primary btn-lg">Aceptar</button></div>
+    							</form>	
 			        	</div> 			        	
 			       </div>
 			    </div>
@@ -69,6 +62,7 @@ include_once "includes/global.php";
      	</footer>
 		
         <script src="js/jquery.min.js"></script>
+        <script src='https://www.google.com/recaptcha/api.js?hl=es'></script>
         <script>window.jQuery || document.write('<script src="js/jquery-1.10.3.min.js"><\/script>')</script> 
         <script src="js/bootstrap.min.js"></script> 
         <script src="js/functions.js"></script> 

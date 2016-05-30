@@ -45,7 +45,70 @@ switch ( $_GET["op"] ) {
 			echo $data["nombre"] . " - " . $data["id"] . "<br/>";
 		}*/
 	break;
+
+	case "olvido":
+
+		include_once "recaptchalib.php";
+		include_once "lib/swift_required.php";
+
+		$secret = "6LcZGSETAAAAAGPIJoP6bnnIO0hrtPzx3L42P4C1";
+ 
+		// respuesta vacía
+		$response = null;
+		 
+		// comprueba la clave secreta
+		$reCaptcha = new ReCaptcha($secret);
+
+		if ( $_POST["g-recaptcha-response"] ) {
+			$response = $reCaptcha->verifyResponse(
+		        $_SERVER["REMOTE_ADDR"],
+		        $_POST["g-recaptcha-response"]
+		    );
+		}
+
+		if ($response != null && $response->success) { //SE ENVIA EL CORREO ELECTRONICO
+
+			$transport = Swift_SmtpTransport::newInstance('host194.hostmonster.com', 465, 'ssl')
+			                     ->setUsername('ivrpg@oriantech.com')
+			                         ->setPassword('ivrpg.2021');
+
+			$smartCode = rand(100000, 999999);
+
+			//Create the Mailer using your created Transport
+			$mailer = Swift_Mailer::newInstance($transport);
+
+			$cadenaEmail = "Ha perdido su contraseña de pagaconring.com, lo sentimos.<br><br>Pero no se preocupe! mediante el siguiente codigo podra restablecerla";
+			$email = base64_encode($_POST["txtEmail"]);
+			//$cadenaEmail .= "<br><br>http://app.pagaconring.com/r1i2n3g4Central/pass_reset.php?email=" . $email;
+			$cadenaEmail .= "Codigo: <h1 style:'font-size=18px;'>$smartCode</h1>";
+			//Create a message
+			$message = Swift_Message::newInstance('[pagaconring.com] Por favor restablezca su clave')
+			                   ->setFrom(array('ivrpg@oriantech.com' => 'PagaConRing.com'))
+			                   ->setTo(strtolower($_POST["txtEmail"]))
+			                   ->setContentType("text/html")
+			                   ->setBody($cadenaEmail);
+
+			//Send the message
+			$result = $mailer->send($message);
+			header("location: ../pass_reset.php");
+        	
+     	} else {
+     		header("location: ../olvido.php");
+     	}
+	break;
 	
+	case "pass_reset":
+
+		if ( $_POST["txtClave"] == $_POST["txtReClave"] ) {
+
+			$dato = $db->update("usuarios", ["#clave" => "PASSWORD('" . $_POST["txtClave"] . "')"], ["codigo" => $_POST["txtCodigo"]]);
+			setNotificacion( "Su clave fue actualizada con exito.", "success");
+			header("location: ../index.php");
+
+		}
+
+	break;
+
 	case "nuevaVenta":
 		/*$last_operacion_id = $db->insert("operaciones_h", [
 										"codOperacion" => $_POST["txtCodigoOperacion"],
