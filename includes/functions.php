@@ -73,6 +73,7 @@ switch ( $_GET["op"] ) {
 			                         ->setPassword('ivrpg.2021');
 
 			$smartCode = rand(100000, 999999);
+			$dato = $db->update("usuarios", ["codigo" => $smartCode], ["email" => $_POST["txtEmail"]]);
 
 			//Create the Mailer using your created Transport
 			$mailer = Swift_Mailer::newInstance($transport);
@@ -80,7 +81,7 @@ switch ( $_GET["op"] ) {
 			$cadenaEmail = "Ha perdido su contraseña de pagaconring.com, lo sentimos.<br><br>Pero no se preocupe! mediante el siguiente codigo podra restablecerla";
 			$email = base64_encode($_POST["txtEmail"]);
 			//$cadenaEmail .= "<br><br>http://app.pagaconring.com/r1i2n3g4Central/pass_reset.php?email=" . $email;
-			$cadenaEmail .= "Codigo: <h1 style:'font-size=18px;'>$smartCode</h1>";
+			$cadenaEmail .= "<br><br><h1 style:'font-size=18px;'>$smartCode</h1>";
 			//Create a message
 			$message = Swift_Message::newInstance('[pagaconring.com] Por favor restablezca su clave')
 			                   ->setFrom(array('ivrpg@oriantech.com' => 'PagaConRing.com'))

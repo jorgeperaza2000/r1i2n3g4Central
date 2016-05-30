@@ -46,7 +46,7 @@ include_once "includes/global.php";
                 ?>
 							  <center><h4>Cambio de contraseña?</h4></center>
 			        		<form name="frmLogin" action="includes/functions.php?op=pass_reset" method="post"  >
-                      <input type="text" name="txtCodigo" value="" placeholder="Introduzca su codigo de validacion" required/> 
+                      <input type="text" name="txtCodigo" class="codigoSeguridad" value="" placeholder="Codigo" required/> 
   						   		  <input type="text" name="txtClave" placeholder="Introduzca su nueva contraseña" required/> 
                       <input type="text" name="txtReClave" placeholder="Repita su nueva contraseña" required/> 
   						   		  <div style="text-align:center; width: 100%; margin-bottom: 10px;"><button type="submit" class="btn btn-primary btn-lg">Aceptar</button></div>
