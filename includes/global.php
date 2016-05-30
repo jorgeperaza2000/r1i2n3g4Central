@@ -197,7 +197,7 @@ function operaciones_PorTipoUsuario(
 	} else if ( $_SESSION["usuario"]["idTipoUsuario"] == 5 ) 
 	{
 	
-		$queryPpal = "SELECT * FROM operaciones_h WHERE idCliente = " . $_SESSION["usuario"]["idCliente"] ." OR idVendedor = " . $_SESSION["usuario"]["id"];
+		$queryPpal = "SELECT * FROM operaciones WHERE idCliente = " . $_SESSION["usuario"]["idCliente"] ." OR idVendedor = " . $_SESSION["usuario"]["id"];
 	
 	}
 	$queryPpal .= $condicionCodOperacion . $condicionDocIdentidad . $condicionFechaDesde . $condicionFechaHasta . $condicionCliente . $condicionEstatus . " ORDER BY id DESC";
