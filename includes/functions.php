@@ -106,6 +106,11 @@ switch ( $_GET["op"] ) {
 			setNotificacion( "Su clave fue actualizada con exito.", "success");
 			header("location: ../index.php");
 
+		} else {
+
+			setNotificacion( "Sus contraseñas no coinciden.", "error");
+			header("location: ../pass_reset.php");
+
 		}
 
 	break;
