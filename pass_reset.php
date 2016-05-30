@@ -45,7 +45,7 @@ include_once "includes/global.php";
                 showNotificacion();
                 ?>
 							  <center><h4>Cambio de contraseña?</h4></center>
-			        		<form name="frmLogin" action="includes/functions.php?op=pass_reset" method="post"  >
+			        		<form name="frmLogin" action="includes/functions.php?op=pass_reset" method="post" autocomplete="off" >
                       <input type="text" name="txtCodigo" class="codigoSeguridad" value="" placeholder="Codigo" required/> 
   						   		  <input type="password" name="txtClave" placeholder="Introduzca su nueva contraseña" required/> 
                       <input type="password" name="txtReClave" placeholder="Repita su nueva contraseña" required/> 
