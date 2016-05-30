@@ -37,6 +37,10 @@
 	                                        <input type="text" name="txtUsuario" id="txtUsuario" class="form-control" placeholder="Usuario: ejemplo (jperez)">
 	                                    </div>
 	                                    <div class="form-group">
+	                                        <label for="txtEmail">* Email</label>
+	                                        <input type="text" name="txtEmail" id="txtEmail" class="form-control" placeholder="Email: ejemplo (jperez@dominio.com)">
+	                                    </div>
+	                                    <div class="form-group">
 	                                        <label for="txtClave">* Clave</label>
 	                                        <input type="password" name="txtClave" id="txtClave" class="form-control" placeholder="Clave">
 	                                    </div>

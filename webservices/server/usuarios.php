@@ -9,6 +9,7 @@ $server->register( "fnGenerica",
             "idUsuario" => "xsd:string",
             "nombre" => "xsd:string",
             "usuario" => "xsd:string", 
+            "email" => "xsd:string", 
             "clave" => "xsd:string", 
             "reclave" => "xsd:string", 
             "extension" => "xsd:string", 
@@ -27,7 +28,7 @@ $server->register( "fnGenerica",
 $post = file_get_contents( "php://input" );
 $server->service( $post );
 
-function fnGenerica( $idUsuario = null, $nombre, $usuario, $clave, $reclave, $extension = null, $tipoUsuario, $idCliente, $accion, $hashValidate ) 
+function fnGenerica( $idUsuario = null, $nombre, $usuario, $email, $clave, $reclave, $extension = null, $tipoUsuario, $idCliente, $accion, $hashValidate ) 
 {
     
     require_once "../../includes/db.php";
@@ -48,6 +49,7 @@ function fnGenerica( $idUsuario = null, $nombre, $usuario, $clave, $reclave, $ex
                 $datos = $db->insert("usuarios", [
                                             "nombre" => $nombre,
                                             "usuario" => $usuario,
+                                            "email" => $email,
                                             "#clave" => "PASSWORD('" . $clave . "')",
                                             "extension" => $extension,
                                             "idTipoUsuario" => $tipoUsuario,
@@ -66,6 +68,7 @@ function fnGenerica( $idUsuario = null, $nombre, $usuario, $clave, $reclave, $ex
                 $datos = $db->update("usuarios", [
                                             "nombre" => $nombre,
                                             "usuario" => $usuario,
+                                            "email" => $email,
                                             "#clave" => "PASSWORD('" . $clave . "')",
                                             "extension" => $extension,
                                             "idTipoUsuario" => $tipoUsuario,

@@ -6,6 +6,7 @@ require_once "../../includes/global.php";
 $idUsuario = isset($_GET["idUsuario"])?$_GET["idUsuario"]:"";
 $nombre = isset($_POST["txtNombre"])?$_POST["txtNombre"]:"";
 $usuario = isset($_POST["txtUsuario"])?$_POST["txtUsuario"]:"";
+$email = isset($_POST["txtEmail"])?$_POST["txtEmail"]:"";
 $clave = isset($_POST["txtClave"])?$_POST["txtClave"]:"";
 $reclave = isset($_POST["txtReClave"])?$_POST["txtReClave"]:"";
 $extension = isset($_POST["txtExtension"])?$_POST["txtExtension"]:"";
@@ -18,7 +19,7 @@ $hash = "*E6CC90B878B948C35E92B003C792C46C58C4AF40";
 switch ( $accion ) {
     case '1': //Crear
         
-        if ( ( $nombre == "" ) || ( $usuario == "" ) || ( $clave == "" ) || ( $reclave == "" ) || ( $tipoUsuario == 0 ) || ( $idCliente == 0 ) )
+        if ( ( $nombre == "" ) || ( $usuario == "" ) || ( $email == "" ) || ( $clave == "" ) || ( $reclave == "" ) || ( $tipoUsuario == 0 ) || ( $idCliente == 0 ) )
         {
 
                 setNotificacion( $mensajeUsuarios["errors"][2], "error");
@@ -46,7 +47,7 @@ switch ( $accion ) {
 
     case '2': //Editar
         
-        if ( ( $nombre == "" ) || ( $usuario == "" ) || ( $clave == "" ) || ( $reclave == "" ) || ( $tipoUsuario == 0 ) || ( $idCliente == 0 ) )
+        if ( ( $nombre == "" ) || ( $usuario == "" ) || ( $email == "" ) || ( $clave == "" ) || ( $reclave == "" ) || ( $tipoUsuario == 0 ) || ( $idCliente == 0 ) )
         {
 
                 setNotificacion( $mensajeUsuarios["errors"][2], "error");
@@ -121,7 +122,7 @@ switch ( $accion ) {
 }
 
 //SE REALIZA EL LLAMADO AL METODO FNGENERICA EN EL WEBSERVICE
-$result = $cliente->call("fnGenerica", array("idUsuario" => $idUsuario, "nombre" => $nombre, "usuario" => $usuario, "clave" => $clave, "reclave" => $reclave, "extension" => $extension, "tipoUsuario" => $tipoUsuario, "idCliente" => $idCliente, "accion" => $accion, "hashValidate" => $hash));
+$result = $cliente->call("fnGenerica", array("idUsuario" => $idUsuario, "nombre" => $nombre, "usuario" => $usuario, "email" => $email, "clave" => $clave, "reclave" => $reclave, "extension" => $extension, "tipoUsuario" => $tipoUsuario, "idCliente" => $idCliente, "accion" => $accion, "hashValidate" => $hash));
 
 //SI FALLA SE IMPRIME EL ERROR
 if ( $cliente->fault ) 
