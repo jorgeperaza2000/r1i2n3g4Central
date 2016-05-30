@@ -1,5 +1,5 @@
 <?php
-$xmlFile = "http://172.30.100.41/ring_request/xml/" . base64_decode( $_GET["id"] ) . ".xml";
+$xmlFile = "http://192.168.1.7/html/ring_request/xml/" . base64_decode( $_GET["id"] ) . ".xml";
 $xm = simplexml_load_file($xmlFile);
 $descripcion = $xm->descripcion;
 $authid = $xm->authid;
