@@ -343,6 +343,23 @@ switch ( $_GET["op"] ) {
 		}
 		echo $salida;
 	break;
+
+	case "cargaComboClientesPorTipo":
+		$salida = "";
+		$idTipoUsuario = $_POST["idTipoUsuario"];
+		if ( $idTipoUsuario == 1 ) {
+			$datas = $db->select("clientes",["id", "nombre"], ["estatus" => 1]);
+		}else if ( $idTipoUsuario == 5 ) {
+			$datas = $db->select("clientes",["id", "nombre"], ["AND" => ["estatus" => 1, "id" => 1]]);
+		} else {
+			$datas = $db->select("clientes",["id", "nombre"], ["AND" => ["estatus" => 1, "id" => $_SESSION["usuario"]["idCliente"]]]);
+		}
+		print_r($datas);
+		foreach ( $datas as $data ) {
+        	$salida .= '<option value="' . $data["id"] . '">' . $data["nombre"] . '</option>';
+		}
+		echo $salida;
+	break;
 	
 	case "enviaOperacionesH":
 		$datos = $db->query("call st_operaciones_historial(" . base64_decode($_GET["id"]) . ")");

@@ -5,8 +5,16 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-$urlWebServiceServer = "http://localhost/r1i2n3g4Central/webservices/server/";
-$urlWebServiceClient = "http://localhost/r1i2n3g4Central/webservices/client/";
+if ( $_SERVER["SERVER_NAME"] == "localhost" ) 
+{
+	$urlWebServiceServer = "http://localhost/r1i2n3g4Central/webservices/server/";
+	$urlWebServiceClient = "http://localhost/r1i2n3g4Central/webservices/client/";
+} else if ( $_SERVER["SERVER_NAME"] == "app.pagaconring.com" ) 
+{
+	$urlWebServiceServer = "http://app.pagaconring.com/r1i2n3g4Central/webservices/server/";
+	$urlWebServiceClient = "http://app.pagaconring.com/r1i2n3g4Central/webservices/client/";
+}
+
 //Secciones
 define('cPrincipal', 'iewkkjhsd');
 define('cCambioClave', 'yhiuweh');

@@ -70,19 +70,9 @@
 											}
 	                                        ?>
 	                                    </select>
-	                                    <?php
-	                                    $datas = $db->select("clientes",["id", "nombre"], ["estatus" => 1]);
-	                                    ?>
 	                                    <label for="cmbCliente">* Cliente</label>
 	                                    <select name="cmbCliente" id="cmbCliente" class="form-control">
 	                                    	<option value="0">-- SELECCIONE --</option>
-	                                        <?php
-	                                        foreach ( $datas as $data ) {
-	                                        ?>
-	                                        	<option value="<?=$data["id"]?>"><?=$data["nombre"]?></option>
-	                                        <?php
-											}
-	                                        ?>
 	                                    </select>
                                     </div><!-- /.box-body -->
                                     <div class="box-footer">
@@ -97,3 +87,24 @@
         </div><!-- ./wrapper -->
     </body>
 </html>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#cmbTipoUsuario").change(function () {
+			if ( $(this).val() == 5 ) {
+
+			}
+		});
+
+		$("#cmbTipoUsuario").change(function () {
+		$("#cmbTipoUsuario option:selected").each(function () {
+			idTipoUsuario = $(this).val();
+			$("#cmbCliente").html('<option>Espere...</option>');
+			$("#cmbCliente").prop('disabled', true);
+			$.post("includes/functions.php?op=cargaComboClientesPorTipo", { idTipoUsuario: idTipoUsuario }, function(data){
+				$("#cmbCliente").prop('disabled', false);
+				$("#cmbCliente").html(data);
+			});     
+		});
+	});
+	});
+</script>
