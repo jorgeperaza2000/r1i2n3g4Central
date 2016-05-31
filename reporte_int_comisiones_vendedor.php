@@ -90,7 +90,7 @@
                                             if ( count( $_POST ) == 0 ) {
 								            ?>
 								            	<tr>
-	                                            	<td align="center" colspan="12">Seleccione algunos criterios de busqueda</td>
+	                                            	<td align="center" colspan="5">Seleccione algunos criterios de busqueda</td>
 	                                            </tr>
 								            <?php
 											} else {
@@ -131,7 +131,7 @@
 												{
 												?>
 													<tr>
-		                                            	<td align="center" colspan="12">No se encontraron coincidencias</td>
+		                                            	<td align="center" colspan="5">No se encontraron coincidencias</td>
 		                                            </tr>
 												<?php	
 												} else {
@@ -146,7 +146,6 @@
 										                		<td style="background-color: #c2c2c2 !important;" align="right" colspan="2">Total Clientes:</td>
 										                		<td style="background-color: #c2c2c2 !important;" align="center"><?=$data["cantOperaciones"]?></td>
 										                		<td style="background-color: #c2c2c2 !important;" align="right"><?=number_format($data["ventaBs"],2,',','.')?></td>
-											                    <td style="background-color: #c2c2c2 !important;" align="right"></td>
 											                    <td style="background-color: #c2c2c2 !important;" align="right"><?=number_format($data["VendedorBs"],2,',','.')?></td>
 										                	<?php
 										                	} else {
