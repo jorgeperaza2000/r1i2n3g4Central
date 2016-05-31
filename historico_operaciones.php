@@ -4,7 +4,7 @@
                 <section class="content-header">
                     <h1>
                         Reportes
-                        <small>Historial de Operaciones</small>
+                        <small>Historial de Ventas</small>
                     </h1>
                     <ol class="breadcrumb">
                         <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -18,7 +18,7 @@
                         <div class="col-xs-12">
                             <div class="box">
                                 <div class="box-header">
-                                    <h3 class="box-title">Historial de Operaciones</h3>                                    
+                                    <h3 class="box-title">Historial de Ventas</h3>                                    
                                 </div><!-- /.box-header -->
                                 <div class="box-body table-responsive">
                                 	<?php

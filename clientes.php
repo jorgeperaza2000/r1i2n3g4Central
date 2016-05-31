@@ -41,6 +41,61 @@
                                     <h3 class="box-title">Clientes Activos e Inactivos</h3>                                    
                                 </div><!-- /.box-header -->
                                 <div class="box-body table-responsive">
+                                    <?php
+                                    $cboVendedor = isset($_POST["cboVendedor"])?$_POST["cboVendedor"]:"0";
+                                    $cboEstatus = isset($_POST["cboEstatus"])?$_POST["cboEstatus"]:"1";
+                                    $txtNombre = isset($_POST["txtNombre"])?$_POST["txtNombre"]:"";
+                                    ?>
+                                    
+                                    <form name="frmFiltroOperaciones" method="post" action="home.php?s=<?=cClientes?>">
+                                        <table data-role="table" id="movie-table" class="ui-responsive table-stroke" data-column-btn-text="Columnas">
+                                            <thead>
+                                                
+                                                <tr>
+                                                    <td style="vertical-align: middle !important;">
+                                                        <label for="cboVendedor">Vendedor</label>
+                                                    </td>
+                                                    <td style="vertical-align: middle !important;">
+                                                        <select name="cboVendedor" id="cboVendedor" class="form-control" >
+                                                            <option <?=($cboVendedor==0)?"selected":"";?> value="0">-- Todos --</option>
+                                                            <?php
+                                                            if ( $_SESSION["usuario"]["idTipoUsuario"] == 1 ) { //PUEDE VER LAS OPERACIONES
+                                                                $combos = $db->select("usuarios", "*", ["AND" => ["estatus" => 1, "idTipoUsuario" => 5]]);
+                                                            } else if ( $_SESSION["usuario"]["idTipoUsuario"] == 5 ) { //PUEDE VER LAS OPERACIONES DE TODOS SUS CLIENTES
+                                                                $combos = $db->select("usuarios","*",["AND" => ["estatus" => 1, "id" => $_SESSION["usuario"]["id"]]]);
+                                                            } 
+                                                            foreach ($combos as $combo) {
+                                                            ?>
+                                                                <option <?=($cboVendedor == $combo["id"])?"selected":"";?> value="<?=$combo["id"]?>"><?=$combo["nombre"]?></option>
+                                                            <?php
+                                                            }
+                                                            ?>
+                                                        </select>
+                                                    </td>
+                                                    <td style="vertical-align: middle !important;">
+                                                        <label for="cboEstatus">Estatus</label>
+                                                    </td>
+                                                    <td style="vertical-align: middle !important;">
+                                                        <select name="cboEstatus" id="cboEstatus" class="form-control" >
+                                                            <option <?=($cboEstatus=="%")?"selected":"";?> value="%">-- Todos --</option>
+                                                            <option <?=($cboEstatus=="1")?"selected":"";?> value="1">Activos</option>
+                                                            <option <?=($cboEstatus=="0")?"selected":"";?> value="0">Inactivos</option>
+                                                        </select>
+                                                    </td>
+                                                    <td style="vertical-align: middle !important;">
+                                                        <label for="txtNombre">Cliente:</label>
+                                                    </td>
+                                                    <td style="vertical-align: middle !important;"></td>
+                                                    <td>
+                                                        <input type="text" name="txtNombre" value="<?=$txtNombre;?>" class="form-control">
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-primary" id="btnSiguiente" type="submit">Buscar</button>
+                                                    </td>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </form>
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
@@ -57,7 +112,24 @@
                                         </thead>
                                         <tbody>
                                             <?php
-                                            $datas = $db->select("clientes", "*", ["ORDER" => ["estatus DESC", "id DESC"]]);
+                                            $condicVendedor = "";
+                                            $condicEstatus = "";
+                                            $condicCliente = "";
+                                            if ( $cboVendedor != "0" ) {
+                                                $condicVendedor = " AND idVendedor = " . $cboVendedor;
+                                            }
+                                            if ( $cboEstatus != "%" ) {
+                                                $condicEstatus = " AND estatus = " . $cboEstatus;
+                                            }
+                                            if ( $txtNombre != "" ) {
+                                                $condicCliente = " AND nombre LIKE '%" . $txtNombre . "%'";
+                                            }
+
+                                            $datas = $db->query("SELECT * FROM clientes 
+                                                                WHERE 
+                                                                1 = 1 " . 
+                                                                $condicVendedor . $condicEstatus . $condicCliente . " ORDER BY id DESC"
+                                                                )->fetchAll();
 											foreach ($datas as $data) {
                                             ?>
                                             <tr>

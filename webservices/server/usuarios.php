@@ -101,7 +101,29 @@ function fnGenerica( $idUsuario = null, $nombre, $usuario, $email, $clave, $recl
             } else if ( $accion == 5 ) //Listar
             {
 
-                $datos = $db->select("usuarios", "*", ["estatus" => 1]);
+                if ( ( $nombre != "" ) && ( $tipoUsuario != 0 ) )
+                {
+
+                    $datos = $db->select("usuarios", "*", ["AND" => ["nombre[~]" => $nombre, ["idTipoUsuario"] => $tipoUsuario, "estatus" => 1]]);
+
+                } else if ( $nombre != "" ) 
+                {
+
+                    $datos = $db->select("usuarios", "*", ["AND" => ["nombre[~]" => $nombre, "estatus" => 1]]);
+
+                } else if ( $tipoUsuario != 0 ) 
+                {
+
+                    $datos = $db->select("usuarios", "*", ["AND" => ["idTipoUsuario" => $tipoUsuario, "estatus" => 1]]);
+
+                } else 
+                {
+
+                    $datos = $db->select("usuarios", "*", ["estatus" => 1]);
+                    
+                }
+
+                
                 $respuesta["datos"] = $datos;
                 $respuesta["success"] = 1;
                 return json_encode( $respuesta );

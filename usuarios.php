@@ -42,7 +42,51 @@
                                 <div class="box-body table-responsive">
                                     <?php
                                     showNotificacion();
+
+                                    $cmbTipoUsuario = isset($_POST["cmbTipoUsuario"])?$_POST["cmbTipoUsuario"]:"0";
+                                    if ( $_SESSION["usuario"]["idTipoUsuario"] == 1 ) {
+                                        $datas = $db->select("tipo_usuario",["id", "nombre", "descripcion"], ["estatus" => 1]);
+                                    } else {
+                                        $datas = $db->select("tipo_usuario",["id", "nombre", "descripcion"], ["AND" => ["estatus" => 1, "mostrar" => 1]]);
+                                    }
                                     ?>
+                                    
+                                    <form name="frmFiltroOperaciones" method="post" action="<?=$urlWebServiceClient;?>clienteUsuarios.php">
+                                        <table data-role="table" id="movie-table" class="ui-responsive table-stroke" data-column-btn-text="Columnas">
+                                            <thead>
+                                                
+                                                <tr>
+                                                    <td style="vertical-align: middle !important;">
+                                                        <label for="cmbTipoUsuario">Tipo de usuario:</label>
+                                                    </td>
+                                                    <td>
+                                                        <select name="cmbTipoUsuario" id="cmbTipoUsuario" class="form-control">
+                                                            <option value="0">-- SELECCIONE --</option>
+                                                            <?php
+                                                            foreach ( $datas as $data ) {
+                                                            ?>
+                                                                <option <?=($cmbTipoUsuario==$data["id"])?"selected":""?> value="<?=$data["id"]?>"><?=$data["nombre"]?></option>
+                                                            <?php
+                                                            }
+                                                            ?>
+                                                        </select>
+                                                    </td>
+                                                    <td style="vertical-align: middle !important;">
+                                                        <label for="txtNombre">Usuario:</label>
+                                                    </td>
+                                                    <td style="vertical-align: middle !important;"></td>
+                                                    <td>
+                                                        <input type="text" name="txtNombre" value="" class="form-control">
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-primary" id="btnSiguiente" type="submit">Buscar</button>
+                                                    </td>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </form>
+
+                                    
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
