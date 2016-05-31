@@ -82,8 +82,6 @@
 									            <th>Vendedor</th>
 									            <th align="center">Operaciones</th>
 									            <th align="right">Venta Bs</th>
-									            <th align="right">Facturado</th>
-									            <th align="right">Vend. %</th>
 									            <th align="right">Vendedor Bs</th>
                                             </tr>
                                         </thead>
@@ -148,7 +146,6 @@
 										                		<td style="background-color: #c2c2c2 !important;" align="right" colspan="2">Total Clientes:</td>
 										                		<td style="background-color: #c2c2c2 !important;" align="center"><?=$data["cantOperaciones"]?></td>
 										                		<td style="background-color: #c2c2c2 !important;" align="right"><?=number_format($data["ventaBs"],2,',','.')?></td>
-											                    <td style="background-color: #c2c2c2 !important;" align="right"><?=number_format($data["facturado"],2,',','.')?></td>
 											                    <td style="background-color: #c2c2c2 !important;" align="right"></td>
 											                    <td style="background-color: #c2c2c2 !important;" align="right"><?=number_format($data["VendedorBs"],2,',','.')?></td>
 										                	<?php
@@ -158,8 +155,6 @@
 										                		<td><?=$data["vendedor"]?></td>
 										                		<td align="center"><?=$data["cantOperaciones"]?></td>
 										                		<td align="right"><?=number_format($data["ventaBs"],2,',','.')?></td>
-											                    <td align="right"><?=number_format($data["facturado"],2,',','.')?></td>
-											                    <td align="right"><?=$data["distribucionVendedor"] . " %"?></td>
 											                    <td align="right"><?=number_format($data["VendedorBs"],2,',','.')?></td>
 										                	<?php		
 										                	}
