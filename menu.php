@@ -157,6 +157,7 @@ function mostrarOpcion ( $opcion, $valor ) {
             </a>
             <ul class="treeview-menu">
                 <li><a href="home.php?s=<?=cReporteGeneral;?>"><i class="fa fa-angle-double-right"></i> General</a></li>
+                <li><a href="home.php?s=<?=cReporteIntComisionesVendedor;?>"><i class="fa fa-angle-double-right"></i> Comisiones Vendedores</a></li>
             </ul>
         </li>
         <?php
@@ -178,7 +179,7 @@ function mostrarOpcion ( $opcion, $valor ) {
             </ul>
         </li>
         <?php
-        }  
+        }
         //OPCION 9
         if ( mostrarOpcion(9, $permimosPorTipo[$idTipoUsuario]) ) {
         ?>
