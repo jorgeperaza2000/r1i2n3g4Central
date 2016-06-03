@@ -45,11 +45,11 @@
 	                                    </div>
 	                                    <div class="form-group">
 	                                        <label for="txtClave">* Clave</label>
-	                                        <input type="password" name="txtClave" value="" id="txtClave" class="form-control" placeholder="Clave">
+	                                        <input type="password" name="txtClave" value="" id="txtClave" class="form-control" placeholder="En caso que desee cambiarla">
 	                                    </div>
 	                                    <div class="form-group">
 	                                        <label for="txtReClave">* Repita la Clave</label>
-	                                        <input type="password" name="txtReClave" value="" id="txtReClave" class="form-control" placeholder="Repita la Clave">
+	                                        <input type="password" name="txtReClave" value="" id="txtReClave" class="form-control" placeholder="Repita la Clave en caso que desee cambiarla">
 	                                    </div>
 	                                    <div class="form-group">
 	                                        <label for="txtExtension">* Extension</label>

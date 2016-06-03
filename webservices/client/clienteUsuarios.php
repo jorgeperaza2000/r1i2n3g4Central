@@ -47,11 +47,11 @@ switch ( $accion ) {
 
     case '2': //Editar
         
-        if ( ( $nombre == "" ) || ( $usuario == "" ) || ( $email == "" ) || ( $clave == "" ) || ( $reclave == "" ) || ( $tipoUsuario == 0 ) || ( $idCliente == 0 ) )
+        if ( ( $nombre == "" ) || ( $usuario == "" ) || ( $email == "" ) || ( $tipoUsuario == 0 ) || ( $idCliente == 0 ) )
         {
 
                 setNotificacion( $mensajeUsuarios["errors"][2], "error");
-                header("location: ../../home.php?s=" . cEditUsuarios . "&id=" . $idUsuario);    
+                header("location: ../../home.php?s=" . cEditUsuarios . "&idUsuario=" . $idUsuario);    
 
         } else 
         {
@@ -60,7 +60,7 @@ switch ( $accion ) {
             {
 
                 setNotificacion( $mensajeUsuarios["errors"][3], "error");
-                header("location: ../../home.php?s=" . cEditUsuarios . "&id=" . $idUsuario);
+                header("location: ../../home.php?s=" . cEditUsuarios . "&idUsuario=" . $idUsuario);
 
             } else
             {

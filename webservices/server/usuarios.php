@@ -65,20 +65,39 @@ function fnGenerica( $idUsuario = null, $nombre, $usuario, $email, $clave, $recl
             } else if ( $accion == 2 ) //Editar
             {
 
-                $datos = $db->update("usuarios", [
-                                            "nombre" => $nombre,
-                                            "usuario" => $usuario,
-                                            "email" => $email,
-                                            "#clave" => "PASSWORD('" . $clave . "')",
-                                            "extension" => $extension,
-                                            "idTipoUsuario" => $tipoUsuario,
-                                            "idCliente" => $idCliente,
-                                            "idUsuario" => 1,//$_SESSION["usuario"]["id"],
-                                            "#fecCreacion" => "NOW()",
-                                            "estatus" => "1",
-                                            "cambioClave" => "1",
-                                            ],
-                                            ["id" => $idUsuario ]);
+                if ( $clave == "" ) 
+                {
+                    $datos = $db->update("usuarios", [
+                                                "nombre" => $nombre,
+                                                "usuario" => $usuario,
+                                                "email" => $email,
+                                                "extension" => $extension,
+                                                "idTipoUsuario" => $tipoUsuario,
+                                                "idCliente" => $idCliente,
+                                                "idUsuario" => 1,//$_SESSION["usuario"]["id"],
+                                                "#fecCreacion" => "NOW()",
+                                                "estatus" => "1",
+                                                "cambioClave" => "1",
+                                                ],
+                                                ["id" => $idUsuario ]);
+                } else 
+                {
+                    $datos = $db->update("usuarios", [
+                                                "nombre" => $nombre,
+                                                "usuario" => $usuario,
+                                                "email" => $email,
+                                                "#clave" => "PASSWORD('" . $clave . "')",
+                                                "extension" => $extension,
+                                                "idTipoUsuario" => $tipoUsuario,
+                                                "idCliente" => $idCliente,
+                                                "idUsuario" => 1,//$_SESSION["usuario"]["id"],
+                                                "#fecCreacion" => "NOW()",
+                                                "estatus" => "1",
+                                                "cambioClave" => "1",
+                                                ],
+                                                ["id" => $idUsuario ]);
+                }
+                
                 $respuesta["success"] = 1;
                 return json_encode( $respuesta );
 
