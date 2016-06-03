@@ -23,7 +23,7 @@
                                     <h3 class="box-title">Datos Principales</h3>
                                 </div><!-- /.box-header -->
                                 <!-- form start -->
-				<form role="form" id="frmNuevaVenta" action="<?=$urlWebServiceClient;?>clienteTransacciones.php" method="post">
+								<form role="form" id="frmNuevaVenta" action="<?=$urlWebServiceClient;?>clienteTransacciones.php" method="post">
                                     <div class="box-body">
                                         <div class="form-group">
 	                                        <label for="txtCodigoOperacion">Identificador</label>
@@ -42,8 +42,8 @@
                                         	<input type="text" name="txtNumeroFactura" id="txtNumeroFactura" class="form-control withoutSpace" placeholder="Ejemplo: Factura, Recibo, Nota de Entrega.">
 	                                    </div>
                                         <div class="form-group">
-											<label for="txtMontoFactura">Monto</label>
-	                                        <input type="text" name="txtMontoFactura" id="txtMontoFactura" class="form-control" placeholder="Monto">
+											<label for="txtMontoFactura">Monto Bs.</label>
+	                                        <input type="text" name="txtMontoFactura" id="txtMontoFactura" class="form-control" placeholder="Monto en Bolivares">
 	                                    </div>
 	                                    <?php
 										$datas = $db->select("virtual_points",["id", "descripcion"], ["idCliente" => $_SESSION["usuario"]["idCliente"]]);
@@ -77,9 +77,11 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#frmNuevaVenta').submit(function( e ){
-			
 			if( $('#txtCodigoOperacion').val() == "" ) {
 				alert("Todos los campos son obligatorios");
+				$('#txtCodigoOperacion').focus(); e.preventDefault();
+			} else if(( $('#txtCodigoOperacion').val().length < 6 ) || ( $('#txtCodigoOperacion').val().length > 8 )) {
+				alert("El identificador debe contener entre 6 y 8 carateres numericos");
 				$('#txtCodigoOperacion').focus(); e.preventDefault();
 			} else if( $('#txtNombre').val() == "" ) {
 				alert("Todos los campos son obligatorios");
