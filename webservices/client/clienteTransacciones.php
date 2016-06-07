@@ -1,5 +1,6 @@
 <?php
 require_once "../nusoap/nusoap.php";
+require_once "../../includes/db.php";
 require_once "../../includes/global.php";
 
 //INICIALIZACION DE VARIABLES Y PARAMETROS
@@ -20,21 +21,46 @@ if ( ( $codOperacion == "" ) || ( $nombre == "" ) || ( $email == "" ) || ( $numC
     setNotificacion( $mensajeTransacciones["errors"][2], "error");
     header("location: ../../home.php");
 
-}
- 
-$cliente = new nusoap_client($urlWebServiceServer . "transacciones.wsdl", true);
+} else 
+{
 
-$result = $cliente->call( "fnGenerica", array( 
-                                                "codOperacion" => $codOperacion, 
-                                                "nombre" => $nombre, 
-                                                "email" => $email, 
-                                                "numControl" => $numControl, 
-                                                "monto" => $monto, 
-                                                "idVirtualPoint" => $idVirtualPoint, 
-                                                "duracionOperaciones" => $duracionOperaciones, 
-                                                "idUsuario" => $idUsuario, 
-                                                "idCliente" => $idCliente, 
-                                                "hashValidate" => $hash ) );
+    //BUSCAR PATRON DE OPERACION DUPLICADA POR EL CLIENTE
+    $dato = $db->count("operaciones", 
+                        ["AND" => [
+                            "codOperacion" => $codOperacion, 
+                            "nombre" => $nombre, 
+                            "email" => $email, 
+                            "numControl" => $numControl, 
+                            "monto" => $monto, 
+                            "idUsuario" => $idUsuario, 
+                            "estatus" => 1
+                        ]]);
+    
+    if ( $dato > 0 ) {
+
+        setNotificacion( "Operacion duplicada", "error");
+        header("location: ../../home.php");
+
+    } else
+    {
+
+        $cliente = new nusoap_client($urlWebServiceServer . "transacciones.wsdl", true);
+
+        $result = $cliente->call( "fnGenerica", array( 
+                                                    "codOperacion" => $codOperacion, 
+                                                    "nombre" => $nombre, 
+                                                    "email" => $email, 
+                                                    "numControl" => $numControl, 
+                                                    "monto" => $monto, 
+                                                    "idVirtualPoint" => $idVirtualPoint, 
+                                                    "duracionOperaciones" => $duracionOperaciones, 
+                                                    "idUsuario" => $idUsuario, 
+                                                    "idCliente" => $idCliente, 
+                                                    "hashValidate" => $hash ) );
+
+    }
+
+}
 
 if ( $cliente->fault ) {
     
