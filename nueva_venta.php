@@ -102,6 +102,7 @@
 				alert("Debe seleccionar un Virtual Point");
 				e.preventDefault();
 			} else {
+				$("#btnSiguiente").attr('disabled','disabled');
 				return true;
 			}
 			
